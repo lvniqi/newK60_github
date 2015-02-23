@@ -2,6 +2,12 @@
 adc ADCDATA;
 adc_sequeue ADC_SEQ;
 adc _ADC_SEQ_DATABASE[ADC_SEQ_LEN];
+/*
+ * ADC初始化
+ *B0 B1 B4 B5 B6 B7 B10 B11
+ *pragma none
+ *
+ * */
 void MyADC_Init()
 {
   ADC_QuickInit(ADC0_SE8_PB0, kADC_SingleDiff12or13);
@@ -18,7 +24,11 @@ void MyADC_Init()
     Sequeue_In_Queue(&ADC_SEQ,ADCDATA);
   }
 }
-
+/*
+ *得到ADC数据
+ *pragma in adc*
+ *
+ */
 void MyADC_Get(adc* adcdata)
 {
   u32 temp = ADC0_SE8_PB0;
