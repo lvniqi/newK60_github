@@ -100,33 +100,28 @@ void ANGLE_Control(void){
   //测试！
   
   if((vertical_1_cut>=320)&&
-  (ADCDATA.vertical_1[0]-ADCDATA.horizontal_1[1]>=320)&&
-  ANGLE_SEQ.right_lock==false)
-  {
-  ANGLE_SEQ.left_lock=true;
+     (ADCDATA.vertical_1[0]-ADCDATA.horizontal_1[1]>=320)&&
+      ANGLE_SEQ.right_lock==false){
+    ANGLE_SEQ.left_lock=true;
   }
   else if((vertical_1_cut<=-320)&&
-  (ADCDATA.vertical_1[1]-ADCDATA.horizontal_1[1]>=320)&&
-  ANGLE_SEQ.left_lock==false)
-  {
-  ANGLE_SEQ.right_lock=true;
+           (ADCDATA.vertical_1[1]-ADCDATA.horizontal_1[1]>=320)&&
+            ANGLE_SEQ.left_lock==false){
+    ANGLE_SEQ.right_lock=true;
   }
   else if(MyADC_H1_Average(&ADCDATA)>1600||
-  MyADC_H2_Average(&ADCDATA)>1600||
-  MyADC_V1_Average(&ADCDATA)>1600)
-  {
-  ANGLE_SEQ.left_lock=false;
-  ANGLE_SEQ.right_lock=false;
+           MyADC_H2_Average(&ADCDATA)>1600||
+           MyADC_V1_Average(&ADCDATA)>1600){
+    ANGLE_SEQ.left_lock=false;
+    ANGLE_SEQ.right_lock=false;
   }
-  if(ANGLE_SEQ.left_lock==true&&MyADC_H1_Average(&ADCDATA)<1600)
-  {
-  ANGLE_SEQ.left_lock_max = true;
-  ANGLE_SEQ.right_lock_max = false;
+  if(ANGLE_SEQ.left_lock==true&&MyADC_H1_Average(&ADCDATA)<1600){
+    ANGLE_SEQ.left_lock_max = true;
+    ANGLE_SEQ.right_lock_max = false;
   }
-  if(ANGLE_SEQ.right_lock==true&&MyADC_H1_Average(&ADCDATA)<1600)
-  {
-  ANGLE_SEQ.left_lock_max = false;
-  ANGLE_SEQ.right_lock_max = true;
+  if(ANGLE_SEQ.right_lock==true&&MyADC_H1_Average(&ADCDATA)<1600){
+    ANGLE_SEQ.left_lock_max = false;
+    ANGLE_SEQ.right_lock_max = true;
   }
   float arg1=0.05/(1+exp(-5+0.004*ADCDATA.horizontal_1[1]))+0.3; //0.3
   float arg2=0.1/(1+exp(5-0.004*ADCDATA.horizontal_1[1]))+0.6;  //0.6  
@@ -138,23 +133,23 @@ void ANGLE_Control(void){
   float near_x;
   //要不要考虑丢线有待实验
   if(horizontal_1_sum>200){
-  far_x=horizontal_1_cut/horizontal_1_sum;
+    far_x=horizontal_1_cut/horizontal_1_sum;
   }
   else{
-  far_x=0;
+    far_x=0;
   }
   if(horizontal_2_sum>200){
-  near_x=horizontal_2_cut/horizontal_2_sum;
+    near_x=horizontal_2_cut/horizontal_2_sum;
   }
   else{
-  near_x=0;
+    near_x=0;
   }
   float duoji_Kp=ABS(50000-ADCDATA.horizontal_1[1]);
   float duoji_Kd=5000;
   float ep;
   float ed = Sequeue_Get_Rear(&ANGLE_P_SEQ)-Sequeue_Get_One(&ANGLE_P_SEQ,ANGLE_P_SEQ.len-3);
   if(he>100){
-  ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
+    ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
   }
   int duojiTemp;
   if(true == ANGLE_SEQ.left_lock_max){
