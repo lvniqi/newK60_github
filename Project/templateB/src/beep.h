@@ -3,7 +3,7 @@
 
 #include "head.h"
 
-#define BEEP_PORT HW_GPIOC
+#define BEEP_PORT HW_GPIOD
 #define BEEP_PIN  10
 
 #define Beep(enable) (GPIO_WriteBit(BEEP_PORT, BEEP_PIN, enable))

@@ -13,9 +13,10 @@
 */
 #define duojic_r 1100
 #define duojic_l 1100
+//#define duoji_mid 4250 //新车的舵机中心值
 #define duoji_mid 4500
-#define duoji_right (duoji_mid-duojic_r)
-#define duoji_left  (duoji_mid+duojic_l)
+#define duoji_right (duoji_mid+duojic_r)
+#define duoji_left  (duoji_mid-duojic_l)
 
 extern float duoji_Kp; //舵机控制P值
 extern float duoji_Kd; //舵机控制d值
@@ -41,6 +42,7 @@ extern float he;
 
 extern u32 duoji;
 extern u32 duojiTemp;
+extern u32 duojiTemp_old;
 
 extern float arg1;
 extern float arg2;

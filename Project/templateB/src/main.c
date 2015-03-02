@@ -67,6 +67,7 @@ float near_x=0;
 
 u32 duoji = duoji_mid;
 u32 duojiTemp=duoji_mid;
+u32 duojiTemp_old=duoji_mid;
 
 bool SZ_left=false;
 bool SZ_right=false;

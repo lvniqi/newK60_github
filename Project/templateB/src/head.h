@@ -34,7 +34,7 @@ extern u32 startTime; //电机出发时间
 #define dianji_ControlTime 10 //电机控制时间
 #define dianji_StartTime 2000 //电机出发时间
 
-#define dingshi 20000
+#define dingshi 15000
 
 extern bool stop; //停车标志
 

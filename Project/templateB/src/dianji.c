@@ -71,9 +71,9 @@ void dianji_Control(void)
   }
   else
   {
-    //dianji_PTurn(1000); //spexpect=100
-    dianji_PID();
-    dianji_PTurn(dianji);
+    dianji_PTurn(1500); //spexpect=100
+    //dianji_PID();
+    //dianji_PTurn(dianji);
   }
 }
 
@@ -84,7 +84,7 @@ void dianji_PID(void)
   sp_e0_last_last=sp_e0_last;
   sp_e0_last=sp_e0;
   
-  sp_expect=140-8*powf(2.7,-(ad7_avg/46.5-2.6642));
+  sp_expect=(u32)(140-8*powf(2.7,-(ad7_avg/46.5-2.6642)));
   
   sp_e0=sp_expect-sp;
   sp_e1=sp_e0-sp_e0_last;

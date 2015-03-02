@@ -134,7 +134,7 @@ void duoji_Control1(void)
     ep0=ep;
     ed=ep0-ep3;
     
-    duojiTemp = duoji_Kp * ep + duoji_Kd * ed + duoji_mid;
+    duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
   }  
   /**
    *舵机限幅
@@ -216,7 +216,7 @@ void duoji_Control2(void)
   ep0=ep;
   ed=ep0-ep3;
   
-  duojiTemp = duoji_Kp * ep + duoji_Kd * ed + duoji_mid;
+  duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
   
   if(ad7_avg>=120)
   {
@@ -292,24 +292,24 @@ void duoji_Control3(void)
     right=false;
   }
   
-  if(left==true&&ad1_avg<80&&ad7_avg<60&&ad3_avg<100)
+  if(left==true&&ad1_avg<90&&ad7_avg<70&&ad3_avg<100&&ad5_avg<90)
   {
     left_max_f=true;
     right_max_f=false;
   }
-  if(right==true&&ad2_avg<80&&ad7_avg<60&&ad4_avg<100)
+  if(right==true&&ad2_avg<90&&ad7_avg<70&&ad4_avg<100&&ad6_avg<90)
   {
     left_max_f=false;
     right_max_f=true;
   }
   
-  e1M2 = ad1_avg - ad2_avg;
+  e1M2 = ad2_avg - ad1_avg;
   e1P2 = ad1_avg + ad2_avg;
   
-  e3M4 = ad3_avg - ad4_avg;
+  e3M4 = ad4_avg - ad3_avg;
   e3P4 = ad3_avg + ad4_avg;
   
-  e5M6 = ad5_avg - ad6_avg;
+  e5M6 = ad6_avg - ad5_avg;
   e5P6 = ad5_avg + ad6_avg;
     
   if(ad3_avg<=10&&ad4_avg<=10)
@@ -350,7 +350,8 @@ void duoji_Control3(void)
   if(he!=0)
   {
     //ep = cha / powf(he, 1.5) + 0.001*far_x; //X范围上的调整
-    ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
+    //ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
+    ep = cha / powf(he, 1.5);
   }
   
   if(left_max_f==true)
@@ -370,13 +371,15 @@ void duoji_Control3(void)
   
   if(left_max_f==true)
   {
+    //duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
     duojiTemp=duoji_left;
-    //beep_time=10;
+    beep_time=10;
   }
   else if(right_max_f==true)
   {
+    //duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
     duojiTemp=duoji_right;
-    //beep_time=10;
+    beep_time=10;
   }
   else
   {
@@ -387,7 +390,7 @@ void duoji_Control3(void)
     ep0=ep;
     ed=ep0-ep3;
     
-    duojiTemp = duoji_Kp * ep + duoji_Kd * ed + duoji_mid;
+    duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
   }
   //判断内外道
   if(duoji_Kp*ep<-350&&600*e5M6/e5P6>30)
@@ -441,21 +444,22 @@ void duoji_Control3(void)
   /**
    *舵机限幅
   */
-  if(duojiTemp >= duoji_left)
+  if(duojiTemp <= duoji_left)
   {
-    ep0=duojic_l/duoji_Kp;
+    ep0=-duojic_l/duoji_Kp;
     duojiTemp = duoji_left;
   }
-  if(duojiTemp <= duoji_right)
+  if(duojiTemp >= duoji_right)
   {
-    ep0=-duojic_r/duoji_Kp;
+    ep0=duojic_r/duoji_Kp;
     duojiTemp = duoji_right;
   }
   
+  duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
   duoji_ChangeDuty(duoji);
-  //duoji_ChangeDuty(duoji_mid);
+  //duoji_ChangeDuty(duoji_left);
   
   if(ad1_avg<6&&ad7_avg<6&&ad2_avg<6&&ad8_avg<6)
     stop=true;
