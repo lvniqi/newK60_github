@@ -2022,12 +2022,6 @@
       <name>$PROJ_DIR$\..\src\main.c</name>
     </file>
   </group>
-  <group>
-    <name>version</name>
-    <file>
-      <name>$PROJ_DIR$\..\src\version.txt</name>
-    </file>
-  </group>
   <file>
     <name>$PROJ_DIR$\..\src\flash.c</name>
   </file>
