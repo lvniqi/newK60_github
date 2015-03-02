@@ -7,7 +7,7 @@ u32 angle = ANGLE_MID;
 float _INDUCT_SEQ_DATABASE[INDUCT_SEQ_LEN];
 float_sequeue INDUCT_SEQ;
 int _ANGLE_SEQ_DATABASE[ANGLE_SEQ_LEN];
-int_sequeue ANGLE_SEQ;
+angle_sequeue ANGLE_SEQ;
 
 void ANGLE_Init(void)
 {
@@ -15,6 +15,8 @@ void ANGLE_Init(void)
   FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, ANGLE_MID);
   Sequeue_Init(&INDUCT_SEQ,_INDUCT_SEQ_DATABASE,INDUCT_SEQ_LEN);
   Sequeue_Init(&ANGLE_SEQ,_ANGLE_SEQ_DATABASE,ANGLE_SEQ_LEN);
+  ANGLE_SEQ.left_lock =false;
+  ANGLE_SEQ.right_lock = false;
   for(int i=0;i<INDUCT_SEQ_LEN-1;i++)
   {
     Sequeue_In_Queue(&INDUCT_SEQ,0);
@@ -34,8 +36,10 @@ void ANGLE_Control(void)
   float horizontal_1_cut = ADCDATA.horizontal_1[0] - ADCDATA.horizontal_1[2];
   //第二排 左侧减右侧
   float horizontal_2_cut = ADCDATA.horizontal_2[0] - ADCDATA.horizontal_2[1];
-  //第一排 左侧加右侧
+  //第一排 总和
   float horizontal_1_sum = MyADC_H1_Sum(&ADCDATA);
+  //第二排 总和
+  float horizontal_2_sum = MyADC_H2_Sum(&ADCDATA);
   //垂直 差 和
   float vertical_1_cut,vertical_1_sum;
   vertical_1_cut = ADCDATA.vertical_1[0] - ADCDATA.vertical_1[1];
@@ -102,5 +106,77 @@ void ANGLE_Control(void)
     Sequeue_In_Queue(&ANGLE_SEQ,angle);
   }
   Sequeue_Out_Queue(&ANGLE_SEQ);
+  
+  //测试！
+  /*
+  if((vertical_1_cut>=320)&&
+     (ADCDATA.vertical_1[0]-ADCDATA.horizontal_1[1]>=320)&&
+     ANGLE_SEQ.right_lock==false)
+  {
+    ANGLE_SEQ.left_lock=true;
+  }
+  else if((vertical_1_cut<=-320)&&
+           (ADCDATA.vertical_1[1]-ADCDATA.horizontal_1[1]>=320)&&
+           ANGLE_SEQ.left_lock==false)
+  {
+    ANGLE_SEQ.right_lock=true;
+  }
+  else if(MyADC_H1_Average(&ADCDATA)>1600||
+           MyADC_H2_Average(&ADCDATA)>1600||
+           MyADC_V1_Average(&ADCDATA)>1600)
+  {
+    ANGLE_SEQ.left_lock=false;
+    ANGLE_SEQ.right_lock=false;
+  }
+  if(ANGLE_SEQ.left_lock==true&&MyADC_H1_Average(&ADCDATA)<1600)
+  {
+    ANGLE_SEQ.left_lock_max = true;
+    ANGLE_SEQ.right_lock_max = false;
+  }
+  if(ANGLE_SEQ.right_lock==true&&MyADC_H1_Average(&ADCDATA)<1600)
+  {
+    ANGLE_SEQ.left_lock_max = false;
+    ANGLE_SEQ.right_lock_max = true;
+  }
+  float arg1=0.05/(1+exp(-5+0.014*ADCDATA.horizontal_1[1]*4))+0.3; //0.3
+  float arg2=0.1/(1+exp(5-0.014*ADCDATA.horizontal_1[1]*4))+0.6;  //0.6  
+  float arg3=0.6;
+  float arg4=0.3;
+  float cha = arg1 * horizontal_1_cut + arg2 * vertical_1_cut;
+  float he = arg3 * horizontal_1_sum + arg4 * vertical_1_sum;
+  float far_x;
+  float near_x;
+  //要不要考虑丢线有待实验
+  if(horizontal_1_sum>200){
+    far_x=horizontal_1_cut/horizontal_1_sum;
+  }
+  else{
+    far_x=0;
+  }
+  if(horizontal_2_sum>200){
+    near_x=horizontal_2_cut/horizontal_2_sum;
+  }
+  else{
+    near_x=0;
+  }
+  float duoji_Kp=ABS(30000-ADCDATA.horizontal_1[1]);
+  float duoji_Kd=60000;
+  float ep;
+  float ed = Sequeue_Get_Rear(&ANGLE_SEQ)-Sequeue_Get_One(&ANGLE_SEQ,ANGLE_SEQ.len-3);
+  if(he>100){
+    ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
+  }
+  int duojiTemp;
+  if(ANGLE_SEQ.left_lock_max==true){
+    duojiTemp=ANGLE_LIMIT_LEFT;
+  }
+  else if(ANGLE_SEQ.right_lock_max==true){
+    duojiTemp=ANGLE_LIMIT_RIGHT;
+  }
+  else{
+    duojiTemp = duoji_Kp * ep + duoji_Kd * ed + ANGLE_MID;
+  }
+  Sequeue_Out_Queue(&ANGLE_SEQ);
+  Sequeue_In_Queue(&ANGLE_SEQ,duojiTemp);*/
   ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
 }

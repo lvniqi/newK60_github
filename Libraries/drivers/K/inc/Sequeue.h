@@ -42,6 +42,19 @@ typedef struct _int_sequeue
 	u16 len_should_cut;
 	u16 len_max;
 } int_sequeue;
+typedef struct _angle_sequeue
+{
+        int* dataspace;
+        u16 front;
+        u16 rear;
+        u16 len;
+        u16 len_should_cut;
+        u16 len_max;
+        bool left_lock;
+        bool left_lock_max;
+        bool right_lock;
+        bool right_lock_max;
+} angle_sequeue;
 typedef struct _float_sequeue
 {
 	float* dataspace;

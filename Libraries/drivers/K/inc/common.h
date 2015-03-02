@@ -160,8 +160,8 @@ void DWT_DelayMs(uint32_t ms);
 #define or ||
 #define and &&
 #define elif else if
+#include <stdbool.h>
 typedef unsigned char u8;
 typedef unsigned short int u16;
 typedef unsigned long u32;
-
 #endif

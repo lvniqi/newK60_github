@@ -30,7 +30,7 @@ extern float angle_ki; //舵机控制i值
 #define INDUCT_SEQ_LEN 10
 extern float_sequeue INDUCT_SEQ;
 #define ANGLE_SEQ_LEN 10
-extern int_sequeue ANGLE_SEQ;
+extern angle_sequeue ANGLE_SEQ;
 extern u32 angle;
 
 #define ANGLE_ChangeDuty(duty) (FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, duty)) //舵机打角程序
