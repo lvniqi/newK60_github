@@ -10,61 +10,53 @@ u8 BEEP_FLAG = 0;
 u8 STOP_FLAG = 0;
 #define Beep(enable) (GPIO_WriteBit(HW_GPIOC, 10, enable))
 /********************************************************************
-* 名称 : PT_THREAD( GetAd(PT *pt) )
-* 功能 : 线程 得到AD
-* 输入 : 无
-* 输出 : 无
-***********************************************************************/
-PT_THREAD( GetAd(PT *pt) )
-{
+ * 名称 : PT_THREAD( GetAd(PT *pt) )
+ * 功能 : 线程 得到AD
+ * 输入 : 无
+ * 输出 : 无
+ ***********************************************************************/
+PT_THREAD(GetAd(PT *pt)){
   PT_BEGIN(pt);
-  PT_WAIT_UNTIL(pt,pt->ready);
-  pt->ready=0;
+  PT_WAIT_UNTIL(pt, pt->ready);
+  pt->ready = 0;
   MyADC_Get(&ADCDATA);
-  if(MyADC_H1_Average(&ADCDATA)<100&&ADCDATA.protect<300)
-  {
-    if(STOP_FLAG <= 100)
-    {
+  if (MyADC_H1_Average(&ADCDATA) < 100 && ADCDATA.protect < 300){
+    if (STOP_FLAG <= 100){
       STOP_FLAG++;
     }
   }
   ANGLE_Control();
-  if (STOP_FLAG > 100)
-  {
+  if (STOP_FLAG > 100){
     SPEED_Stop();
   }
   PT_END(pt);
 }
 
 /********************************************************************
-* 名称 : PT_THREAD( BEEP(PT *pt) )
-* 功能 : 蜂鸣器
-* 输入 : 无
-* 输出 : 无
-***********************************************************************/
-PT_THREAD( BEEP(PT *pt) )
-{
-    static u8 i;
-    static u8 my_beep_flag = 0;
-    PT_BEGIN(pt);
-    while(true)
-    {
-    PT_WAIT_UNTIL(pt,BEEP_FLAG != my_beep_flag);
+ * 名称 : PT_THREAD( BEEP(PT *pt) )
+ * 功能 : 蜂鸣器
+ * 输入 : 无
+ * 输出 : 无
+ ***********************************************************************/
+PT_THREAD(BEEP(PT *pt)){
+  static u8 i;
+  static u8 my_beep_flag = 0;
+  PT_BEGIN(pt);
+  while (true){
+    PT_WAIT_UNTIL(pt, BEEP_FLAG != my_beep_flag);
     my_beep_flag = BEEP_FLAG;
     {
       Beep(true);
-      for(i=0;i<10;i++)
-      {
-        PT_WAIT_UNTIL(pt,pt->ready);
+      for (i = 0; i < 10; i++){
+        PT_WAIT_UNTIL(pt, pt->ready);
         pt->ready = 0;
-        if(BEEP_FLAG != my_beep_flag)
-        {
+        if (BEEP_FLAG != my_beep_flag){
           my_beep_flag = BEEP_FLAG;
-          i= 0;
+          i = 0;
         }
       }
     }
     Beep(false);
-    }
-    PT_END(pt);
+  }
+  PT_END(pt);
 }
