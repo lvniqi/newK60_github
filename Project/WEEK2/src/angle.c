@@ -4,20 +4,20 @@ float angle_kd = 18000; //舵机控制d值
 float angle_ki = 0; //舵机控制i值
 u32 angle = ANGLE_MID;
 
-float _INDUCT_SEQ_DATABASE[INDUCT_SEQ_LEN];
-float_sequeue INDUCT_SEQ;
+float _ANGLE_P_SEQ_DATABASE[ANGLE_P_SEQ_LEN];
+float_sequeue ANGLE_P_SEQ;
 int _ANGLE_SEQ_DATABASE[ANGLE_SEQ_LEN];
 angle_sequeue ANGLE_SEQ;
 
 void ANGLE_Init(void){
   FTM_PWM_QuickInit(FTM1_CH1_PA09, kPWM_EdgeAligned, 300);
   FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, ANGLE_MID);
-  Sequeue_Init(&INDUCT_SEQ, _INDUCT_SEQ_DATABASE, INDUCT_SEQ_LEN);
+  Sequeue_Init(&ANGLE_P_SEQ, _ANGLE_P_SEQ_DATABASE, ANGLE_P_SEQ_LEN);
   Sequeue_Init(&ANGLE_SEQ, _ANGLE_SEQ_DATABASE, ANGLE_SEQ_LEN);
   ANGLE_SEQ.left_lock = false;
   ANGLE_SEQ.right_lock = false;
-  for (int i = 0; i < INDUCT_SEQ_LEN - 1; i++){
-    Sequeue_In_Queue(&INDUCT_SEQ, 0);
+  for (int i = 0; i < ANGLE_P_SEQ_LEN - 1; i++){
+    Sequeue_In_Queue(&ANGLE_P_SEQ, 0);
   }
   for (int i = 0; i < ANGLE_SEQ_LEN - 1; i++){
     Sequeue_In_Queue(&ANGLE_SEQ, ANGLE_MID);
@@ -65,9 +65,9 @@ void ANGLE_Control(void){
     ep = cha / powf(he, 1.5);
   }
   else{
-    ep = Sequeue_Get_Rear(&INDUCT_SEQ);
+    ep = Sequeue_Get_Rear(&ANGLE_P_SEQ);
   }
-  Sequeue_In_Queue(&INDUCT_SEQ, ep);
+  Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
   if (MyADC_H1_Average(&ADCDATA) / 100 < MyADC_H1_Average(&Sequeue_Get_One
     (&ADC_SEQ, ADC_SEQ.len - 2)) / 100 and angle_kp < 35000){
     angle_kp += 1;
@@ -76,9 +76,9 @@ void ANGLE_Control(void){
     (&ADC_SEQ, ADC_SEQ.len - 2)) / 100 and angle_kp > 25000){
     angle_kp -= 2;
   }
-  Sequeue_Out_Queue(&INDUCT_SEQ);
-  float ed = Sequeue_Get_One(&INDUCT_SEQ, INDUCT_SEQ.len - 2) - Sequeue_Get_One
-    (&INDUCT_SEQ, INDUCT_SEQ.len - 4);
+  Sequeue_Out_Queue(&ANGLE_P_SEQ);
+  float ed = Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 2) - Sequeue_Get_One
+    (&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 4);
   angle = ANGLE_MID + (angle_kp *ep + angle_kd * ed);
   ANGLE_Size_control(angle);
   if ((MyADC_H1_Average(&ADCDATA) < 150 and MyADC_H1_Average(&ADCDATA) <
@@ -152,7 +152,7 @@ void ANGLE_Control(void){
   float duoji_Kp=ABS(50000-ADCDATA.horizontal_1[1]);
   float duoji_Kd=5000;
   float ep;
-  float ed = Sequeue_Get_Rear(&ANGLE_SEQ)-Sequeue_Get_One(&ANGLE_SEQ,ANGLE_SEQ.len-3);
+  float ed = Sequeue_Get_Rear(&ANGLE_P_SEQ)-Sequeue_Get_One(&ANGLE_P_SEQ,ANGLE_P_SEQ.len-3);
   if(he>100){
   ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
   }
@@ -164,7 +164,9 @@ void ANGLE_Control(void){
     duojiTemp=ANGLE_LIMIT_RIGHT;
   }
   else{
-    duojiTemp = duoji_Kp * ep + duoji_Kd * ed + ANGLE_MID;
+    Sequeue_Out_Queue(&ANGLE_P_SEQ);
+    Sequeue_In_Queue(&ANGLE_P_SEQ,(duoji_Kp * ep));
+    duojiTemp = Sequeue_Get_Rear(&ANGLE_P_SEQ) + duoji_Kd * ed + ANGLE_MID;
     //duojiTemp = duoji_Kp * ep + ANGLE_MID;
   }
   Sequeue_Out_Queue(&ANGLE_SEQ);

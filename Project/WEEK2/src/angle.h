@@ -4,6 +4,7 @@
   #include "FTM.h"
   #include "Threads.h"
   #include "ymath.h"
+  #include "math.h"
   #include "sequeue.h"
   /**
    *舵机参数：
@@ -27,8 +28,8 @@
   extern float angle_kp; //舵机控制P值
   extern float angle_kd; //舵机控制d值
   extern float angle_ki; //舵机控制i值
-  #define INDUCT_SEQ_LEN 10
-  extern float_sequeue INDUCT_SEQ;
+  #define ANGLE_P_SEQ_LEN ANGLE_SEQ_LEN
+  extern float_sequeue ANGLE_P_SEQ;
   #define ANGLE_SEQ_LEN 10
   extern angle_sequeue ANGLE_SEQ;
   extern u32 angle;
