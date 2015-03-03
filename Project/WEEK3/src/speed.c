@@ -23,7 +23,7 @@ void PIT1_Isr(void){
   int j = abs(Sequeue_Get_Rear(&ANGLE_SEQ) - ANGLE_MID) / 100;
   if (STOP_FLAG < 40){
     //SPEED_Control(SPEED_SET((110-j)));
-    SPEED_Control(1500);
+    SPEED_Control(1550);
   }
   SPEED_COUNTER_Show(SPEED_CURR);
 }

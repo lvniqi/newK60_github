@@ -48,7 +48,7 @@ int main(void){
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
-  PT_INIT(&thread[0], 5); //5ms一次ad采集
+    PT_INIT(&thread[0], 5); //5ms一次ad采集
   PT_INIT(&thread[1], 10); //10ms一次蜂鸣器
 
   while (1){

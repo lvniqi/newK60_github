@@ -1,6 +1,6 @@
 #include "init.h"
 u32 RunTime = 0;
-int abs(int a){
+float abs(float a){
   if (a > 0)
     return a;
   else
@@ -45,6 +45,6 @@ void BaseTimer(void){
  * 输出 : 无
  ***********************************************************************/
 void beep_Init(void){
-  GPIO_QuickInit(HW_GPIOC, 10, kGPIO_Mode_OPP);
-  GPIO_WriteBit(HW_GPIOC, 10, 0); //蜂鸣器初始化输出为0
+  GPIO_QuickInit(HW_GPIOD, 10, kGPIO_Mode_OPP);
+  GPIO_WriteBit(HW_GPIOD, 10, 0); //蜂鸣器初始化输出为0
 }

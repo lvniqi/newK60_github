@@ -34,7 +34,7 @@
   extern angle_sequeue ANGLE_SEQ;
   extern u32 angle;
 
-  #define ANGLE_ChangeDuty(duty) (FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, duty))
+  #define ANGLE_ChangeDuty(duty) (FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, (duty)))
   //舵机打角程序
 
   extern void ANGLE_Init(void); //舵机初始化

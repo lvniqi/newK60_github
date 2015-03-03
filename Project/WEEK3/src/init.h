@@ -29,5 +29,5 @@
    * Êä³ö : ÎÞ
    ***********************************************************************/
   extern void beep_Init(void);
-  extern int abs(int a);
+  extern float abs(float a);
 #endif

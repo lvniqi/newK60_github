@@ -11,15 +11,6 @@
 #include "spi.h"
 #include "nrf24l01.h"
 
-PT_THREAD(TIMER(PT *pt)){
-  PT_BEGIN(pt);
-  PT_WAIT_UNTIL(pt, pt->ready);
-  pt->ready = 0;
-  Beep_Enable();
-
-  PT_END(pt);
-}
-
 void NFR24l01_Init(){
   /* 初始化2401模块*/
   static struct spi_bus bus;
@@ -50,7 +41,6 @@ int main(void){
   beep_Init(); //蜂鸣器初始化
   PT_INIT(&thread[0], 5); //5ms一次ad采集
   PT_INIT(&thread[1], 10); //10ms一次蜂鸣器
-
   while (1){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器
@@ -60,6 +50,5 @@ int main(void){
       //nrf24l01_write_packet("1234567890", 10);
       MyADC_Show(&ADCDATA); //显示
     }
-    //TIMER(&thread[2]);
   }
 }

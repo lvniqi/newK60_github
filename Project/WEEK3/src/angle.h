@@ -15,16 +15,19 @@
    *duoji_left:舵机左最大值
    */
   #define ANGLE_LIMIT 1200
-  #define ANGLE_MID 4470
+  #define ANGLE_MID 4600
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
+  #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-300||(angle) <ANGLE_LIMIT_LEFT+300)
+  #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-300){(angle) = ANGLE_LIMIT_RIGHT;}\
+                                         else if((angle) <ANGLE_LIMIT_LEFT+300){(angle) = ANGLE_LIMIT_LEFT;}}   
   #define ANGLE_Size_control(angle){ if(angle > ANGLE_LIMIT_RIGHT) angle =\
   ANGLE_LIMIT_RIGHT;if(angle<ANGLE_LIMIT_LEFT)angle = ANGLE_LIMIT_LEFT;}
 
-  //#define arg1 0.6
-  //#define arg2 1.3
-  //#define arg3 0.3
-  //#define arg4 0.3
+  #define arg1 0.6
+  #define arg2 1.3
+  #define arg3 0.3
+  #define arg4 0.3
   extern float angle_kp; //舵机控制P值
   extern float angle_kd; //舵机控制d值
   extern float angle_ki; //舵机控制i值

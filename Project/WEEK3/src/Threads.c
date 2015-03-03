@@ -8,7 +8,7 @@
 PT thread[THREAD_NUM];
 u8 BEEP_FLAG = 0;
 u8 STOP_FLAG = 0;
-#define Beep(enable) (GPIO_WriteBit(HW_GPIOC, 10, enable))
+#define Beep(enable) (GPIO_WriteBit(HW_GPIOD, 10, enable))
 /********************************************************************
  * 名称 : PT_THREAD( GetAd(PT *pt) )
  * 功能 : 线程 得到AD
@@ -20,7 +20,10 @@ PT_THREAD(GetAd(PT *pt)){
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
-  if (MyADC_H1_Average(&ADCDATA) < 100 && ADCDATA.protect < 300){
+  if (MyADC_H1_Average(&ADCDATA) < 100 &&
+      MyADC_H2_Average(&ADCDATA) < 100 &&
+      MyADC_V1_Average(&ADCDATA) < 100 &&
+      ADCDATA.protect < 300){
     if (STOP_FLAG <= 100){
       STOP_FLAG++;
     }
@@ -46,7 +49,7 @@ PT_THREAD(BEEP(PT *pt)){
     PT_WAIT_UNTIL(pt, BEEP_FLAG != my_beep_flag);
     my_beep_flag = BEEP_FLAG;
     {
-      Beep(true);
+      Beep(1);
       for (i = 0; i < 10; i++){
         PT_WAIT_UNTIL(pt, pt->ready);
         pt->ready = 0;
@@ -56,7 +59,7 @@ PT_THREAD(BEEP(PT *pt)){
         }
       }
     }
-    Beep(false);
+    Beep(0);
   }
   PT_END(pt);
 }
