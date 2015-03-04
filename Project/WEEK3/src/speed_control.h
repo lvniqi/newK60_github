@@ -28,7 +28,7 @@
   /****************/
   //extern PT_THREAD( SPEED_GET(PT *pt) );
   /****************/
-  #define SPEED_SET(speed) speed_mid_PID(speed,SPEED_P,SPEED_I,SPEED_D)
+  #define SPEED_SET(speed) speed_mid_PID((speed),SPEED_P,SPEED_I,SPEED_D)
   extern void Speed_Sequeue_Init(void);
   /*现有速度*/
   extern int SPEED_CURR;

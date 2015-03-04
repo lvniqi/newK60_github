@@ -35,20 +35,19 @@ int main(void){
   OLED_Init(); //OLED初始化
   //NFR24l01_Init();
   ANGLE_Init(); //舵机初始化
-  SPEED_COUNTER_Init(); //编码器初始化
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
   PT_INIT(&thread[0], 5); //5ms一次ad采集
-  PT_INIT(&thread[1], 10); //10ms一次蜂鸣器
+  PT_INIT(&thread[1], 20); //10ms一次蜂鸣器
   while (1){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器
     //如果运行结束
-    if (GetAd(&thread[0]) == PT_ENDED){ 
+    //if (GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();
       //nrf24l01_write_packet("1234567890", 10);
-      MyADC_Show(&ADCDATA); //显示
-    }
+    //  MyADC_Show(&ADCDATA); //显示
+    //}
   }
 }

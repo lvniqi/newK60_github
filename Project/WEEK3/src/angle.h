@@ -18,14 +18,14 @@
   #define ANGLE_MID 4600
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
-  #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-300||(angle) <ANGLE_LIMIT_LEFT+300)
-  #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-300){(angle) = ANGLE_LIMIT_RIGHT;}\
-                                         else if((angle) <ANGLE_LIMIT_LEFT+300){(angle) = ANGLE_LIMIT_LEFT;}}   
+  #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-600||(angle) <ANGLE_LIMIT_LEFT+600)
+  #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-600){(angle) = ANGLE_LIMIT_RIGHT;}\
+                                         else if((angle) <ANGLE_LIMIT_LEFT+600){(angle) = ANGLE_LIMIT_LEFT;}}   
   #define ANGLE_Size_control(angle){ if(angle > ANGLE_LIMIT_RIGHT) angle =\
   ANGLE_LIMIT_RIGHT;if(angle<ANGLE_LIMIT_LEFT)angle = ANGLE_LIMIT_LEFT;}
 
-  #define arg1 0.6
-  #define arg2 1.3
+  #define arg1 1.2
+  #define arg2 2.6
   #define arg3 0.3
   #define arg4 0.3
   extern float angle_kp; //¶æ»ú¿ØÖÆPÖµ

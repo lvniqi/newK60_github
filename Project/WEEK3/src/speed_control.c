@@ -3,7 +3,7 @@
 
 
 float SPEED_P = 100;
-float SPEED_I = 0.1;
+float SPEED_I = 3.0;
 float SPEED_D = 0;
 speed_sequeue SPEED_LIST;
 
@@ -26,13 +26,13 @@ float speed_mid_PID(float set_speed, double kp, double ki, double kd){
     last.speed_error) + kd *(now.speed_error + pre_last.speed_error - 2 *
     last.speed_error) + last.speed_set; //Êý×ÖÊ½PID
   now.speed_set = speed_PWM_temp;
-  Sequeue_In_Queue(&SPEED_LIST, now);
   if (now.speed_set > 9999){
     now.speed_set = 9999;
   }
   elif(now.speed_set < 0){
     now.speed_set = 0;
   }
+  Sequeue_In_Queue(&SPEED_LIST, now);
   return now.speed_set;
 
 }
