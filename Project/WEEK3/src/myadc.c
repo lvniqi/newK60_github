@@ -105,6 +105,7 @@ u16 MyADC_V1_Min(adc *adcdata){
 }
 
 void MyADC_Show(adc *adcdata){
+  
   OLED_PrintShort(60, 0, (adcdata->horizontal_1)[0]);
   OLED_PrintShort(60, 1, (adcdata->horizontal_1)[1]);
   OLED_PrintShort(60, 2, (adcdata->horizontal_1)[2]);
@@ -112,5 +113,5 @@ void MyADC_Show(adc *adcdata){
   OLED_PrintShort(60, 4, (adcdata->vertical_1)[1]);
   OLED_PrintShort(60, 5, (adcdata->horizontal_2)[0]);
   OLED_PrintShort(60, 6, (adcdata->horizontal_2)[1]);
-  OLED_PrintShort(60,7,adcdata->protect);
+  //OLED_PrintShort(60,7,adcdata->protect);
 }

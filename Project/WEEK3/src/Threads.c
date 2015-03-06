@@ -63,3 +63,14 @@ PT_THREAD(BEEP(PT *pt)){
   }
   PT_END(pt);
 }
+PT_THREAD(SHOW(PT *pt)){
+  PT_BEGIN(pt);
+  while(true){
+    PT_WAIT_UNTIL(pt, pt->ready);
+    pt->ready = 0;  
+    //’‚¿Ô–¥œ‘ æ”Ôæ‰
+    MyADC_Show(&ADCDATA);
+    SPEED_COUNTER_Show(SPEED_CURR);
+  }
+  PT_END(pt);
+}

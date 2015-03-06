@@ -31,6 +31,9 @@ void NFR24l01_Init(){
 
 int main(void){
   DelayInit();
+  PT_INIT(&thread[0], 5); //5ms一次ad采集
+  PT_INIT(&thread[1], 20); //20ms一次蜂鸣器
+  PT_INIT(&thread[2], 200); //200ms一次显示数据
   BaseTimer_Init(); //1ms基本时钟
   OLED_Init(); //OLED初始化
   //NFR24l01_Init();
@@ -38,11 +41,10 @@ int main(void){
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
-  PT_INIT(&thread[0], 5); //5ms一次ad采集
-  PT_INIT(&thread[1], 20); //10ms一次蜂鸣器
   while (1){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器
+    SHOW(&thread[2]);//显示数据
     //如果运行结束
     //if (GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();

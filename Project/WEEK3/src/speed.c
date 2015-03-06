@@ -26,5 +26,5 @@ void PIT1_Isr(void){
     SPEED_Control(SPEED_SET(125-j));
     //SPEED_Control(1550);
   }
-  SPEED_COUNTER_Show(SPEED_CURR);
+  //SPEED_COUNTER_Show(SPEED_CURR);
 }
