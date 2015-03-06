@@ -99,8 +99,9 @@ void ANGLE_Control(void){
   }
   else{
     Sequeue_In_Queue(&ANGLE_SEQ, angle);
+    Sequeue_Out_Queue(&ANGLE_SEQ);
   }
-  Sequeue_Out_Queue(&ANGLE_SEQ);
+  
   //²âÊÔ£¡
   /*
   if((vertical_1_cut>=320)&&
