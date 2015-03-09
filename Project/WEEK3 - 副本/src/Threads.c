@@ -31,7 +31,6 @@ PT_THREAD(GetAd(PT *pt)){
   ANGLE_Control();
   if (STOP_FLAG > 100){
     SPEED_Stop();
-    
   }
   PT_END(pt);
 }
@@ -61,6 +60,23 @@ PT_THREAD(BEEP(PT *pt)){
       }
     }
     Beep(0);
+  }
+  PT_END(pt);
+}
+/********************************************************************
+ * 名称 : PT_THREAD( SHOW(PT *pt) )
+ * 功能 : 显示数据
+ * 输入 : 无
+ * 输出 : 无
+ ***********************************************************************/
+PT_THREAD(SHOW(PT *pt)){
+  PT_BEGIN(pt);
+  while(true){
+    PT_WAIT_UNTIL(pt, pt->ready);
+    pt->ready = 0;  
+    //这里写显示语句
+    MyADC_Show(&ADCDATA);
+    SPEED_COUNTER_Show(SPEED_CURR);
   }
   PT_END(pt);
 }

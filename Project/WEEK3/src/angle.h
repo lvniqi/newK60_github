@@ -24,10 +24,8 @@
   #define ANGLE_Size_control(angle){ if(angle > ANGLE_LIMIT_RIGHT) angle =\
   ANGLE_LIMIT_RIGHT;if(angle<ANGLE_LIMIT_LEFT)angle = ANGLE_LIMIT_LEFT;}
 
-  #define arg1 1.2
-  #define arg2 2.6
-  #define arg3 0.3
-  #define arg4 0.3
+  #define arg1 30
+  #define arg2 (100-arg1)
   extern float angle_kp; //舵机控制P值
   extern float angle_kd; //舵机控制d值
   extern float angle_ki; //舵机控制i值

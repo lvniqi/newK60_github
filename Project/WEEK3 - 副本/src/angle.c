@@ -132,7 +132,7 @@ void ANGLE_Control(void){
     ANGLE_SEQ.lock = true;
     //Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>2800){
+  else if(horizontal_1_sum+vertical_1_sum>3500){
     ANGLE_SEQ.lock = false;
   }
   

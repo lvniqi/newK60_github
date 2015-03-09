@@ -1,7 +1,6 @@
 #include "angle.h"
-float angle_kp = 10500; //舵机控制P值
-float angle_kd = 25500; //舵机控制d值
-float angle_ki = 0; //舵机控制i值
+float angle_kp = 2394; //舵机控制P值
+float angle_kd = 5814; //舵机控制d值
 u32 angle = ANGLE_MID;
 
 float _ANGLE_P_SEQ_DATABASE[ANGLE_P_SEQ_LEN];
@@ -41,15 +40,15 @@ void ANGLE_Control(void){
   vertical_1_cut = ADCDATA.vertical_1[1] - ADCDATA.vertical_1[0];
   vertical_1_sum = MyADC_V1_Sum(&ADCDATA);
   if (
-      (horizontal_2_sum/2.2>horizontal_1_sum &&
-       horizontal_2_sum/4>vertical_1_sum &&
+      (horizontal_2_sum/2>horizontal_1_sum &&
+       horizontal_2_sum/3>vertical_1_sum &&
        ANGLE_SEQ.lock != true)
       ){
     ANGLE_goto_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
     ANGLE_SEQ.lock = true;
     //Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>2800){
+  else if(horizontal_1_sum+vertical_1_sum>3500){
     ANGLE_SEQ.lock = false;
   }
   //如果前后差太大 更相信后方
@@ -66,7 +65,7 @@ void ANGLE_Control(void){
   }
   */
   float cha = arg1 * horizontal_1_cut + arg2 * vertical_1_cut;
-  float he = arg3 * horizontal_1_sum + arg4 * vertical_1_sum;
+  float he =  horizontal_1_sum + vertical_1_sum;
   float ep;
   if (he > 50&&!(ANGLE_SEQ.lock)){
     ep = cha / powf(he, 1.5);
