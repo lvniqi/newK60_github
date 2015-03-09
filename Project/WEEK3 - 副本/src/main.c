@@ -44,10 +44,15 @@ int main(void){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器
     //如果运行结束
-    //if (GetAd(&thread[0]) == PT_ENDED){ 
+    if(GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();
       //nrf24l01_write_packet("1234567890", 10);
-    //  MyADC_Show(&ADCDATA); //显示
-    //}
+      MyADC_Show(&ADCDATA); //显示
+      if(time>=1000)
+      {
+         time=0;
+         MyADC_Show(&ADCDATA); //显示
+      }
+    }
   }
 }

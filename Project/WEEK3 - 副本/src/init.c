@@ -27,6 +27,7 @@ void BaseTimer_Init(void){
  ***********************************************************************/
 void BaseTimer(void){
   u8 i;
+  time++;
   for (i = 0; i < THREAD_NUM; i++){
     if ((thread + i)->count > 0){
       (thread + i)->count -= 1;

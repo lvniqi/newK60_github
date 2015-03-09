@@ -15,8 +15,8 @@
    *duoji_left:舵机左最大值
    */
   #define ANGLE_LIMIT 1200
-  //#define ANGLE_MID 4250 //新车
-  #define ANGLE_MID 4600 //旧车
+  #define ANGLE_MID 4250 //新车
+  //#define ANGLE_MID 4600 //旧车
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
   #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-600||(angle) <ANGLE_LIMIT_LEFT+600)
@@ -32,9 +32,10 @@
   extern float angle_kp; //舵机控制P值
   extern float angle_kd; //舵机控制d值
   extern float angle_ki; //舵机控制i值
+  
   #define ANGLE_P_SEQ_LEN ANGLE_SEQ_LEN
   extern float_sequeue ANGLE_P_SEQ;
-  #define ANGLE_SEQ_LEN 10
+  #define ANGLE_SEQ_LEN 10 //打角队列长度
   extern angle_sequeue ANGLE_SEQ;
   extern u32 angle;
 

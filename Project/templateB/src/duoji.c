@@ -373,13 +373,13 @@ void duoji_Control3(void)
   {
     //duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
     duojiTemp=duoji_left;
-    beep_time=10;
+    //beep_time=10;
   }
   else if(right_max_f==true)
   {
     //duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
     duojiTemp=duoji_right;
-    beep_time=10;
+    //beep_time=10;
   }
   else
   {
@@ -458,9 +458,289 @@ void duoji_Control3(void)
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
-  //duoji_ChangeDuty(duoji_left);
+  if(stop)
+  {
+    duoji_ChangeDuty(duoji_mid);
+  }
+  else
+  {
+    duoji_ChangeDuty(duoji);
+  }
+  //duoji_ChangeDuty(duoji);
   
-  if(ad1_avg<6&&ad7_avg<6&&ad2_avg<6&&ad8_avg<6)
+  if(ad1_avg<6&&ad7_avg<6&&ad2_avg<6&&ad8_avg<6&&ad3_avg<6&&ad4_avg<6&&ad5_avg<6&&ad6_avg<6)
     stop=true;
+}
+
+void duoji_Control4(void)
+{
+  /**
+   *舵机方向控制
+  */
+  /**
+   *your own control
+  */
+  if(beep_time>0)
+  {
+    beep_time--;
+    Beep(true);
+  }
+  else
+  {
+    beep_time=0;
+    Beep(false);
+  }
+  
+  e1M2 = ad2_avg - ad1_avg;
+  e1P2 = ad1_avg + ad2_avg;
+  
+  e3M4 = ad4_avg - ad3_avg;
+  e3P4 = ad3_avg + ad4_avg;
+  
+  e5M6 = ad6_avg - ad5_avg;
+  e5P6 = ad5_avg + ad6_avg;
+  
+  sum_h1=ad1_avg+ad7_avg+ad2_avg;
+  sum_v1=ad3_avg+ad4_avg;
+  sum_h2=ad5_avg+ad6_avg+ad8_avg;
+  
+  arg1=0.3;
+  arg2=0.6;  
+  arg3=0.6;
+  arg4=0.3;
+
+  cha = arg1 * e1M2 + arg2 * e3M4;
+  he = arg3 * (e1P2 + ad7_avg) + arg4 * e3P4;
+  cha1 = e5M6;
+  he1 = e5P6 + ad8_avg;
+  
+  duoji_Kp=ABS(30000-12*ad7_avg);
+  //duoji_Kp=30000;
+  duoji_Kd=60000;
+  
+  if(left_max_f)
+  {
+    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg)
+    {
+      left_max_f=false;
+      //beep_time=10;
+    }
+  }
+  else if(right_max_f)
+  {
+    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg)
+    {
+      right_max_f=false;
+      //beep_time=10;
+    }
+  }
+  
+  if(sum_h2/2>sum_h1&&sum_h2/4>sum_v1&&lock==false)
+  {
+    lock=true;
+    beep_time=10;
+  }
+  if(lock==true)
+  {
+    if(ep9>0&&ad2_avg>ad1_avg&&ad4_avg>ad3_avg)
+    {
+      lock=false;
+      //beep_time=10;
+    }
+    else if(ep9<0&&ad1_avg>ad2_avg&&ad3_avg>ad4_avg)
+    {
+      lock=false;
+      //beep_time=10;
+    }
+  }
+  /*
+  if(he>50&&lock==false)
+  {
+    //far_x=e1M2/powf(e1P2,1.5);
+    //near_x=e5M6/powf(e5P6,1.5);
+    
+    //ep = cha / powf(he, 1.5) + powf((far_x-near_x),3)*0.1*0;
+    ep = cha / powf(he, 1.5);
+  }
+  else
+  {
+    ep=ep9;
+  }
+  */
+  if(he>50)
+  {
+    ep = cha / powf(he, 1.5);
+  }
+  else
+  {
+    ep=ep9;
+  }
+
+
+  ep9=ep8;
+  ep8=ep7;
+  ep7=ep6;
+  ep6=ep5;
+  ep5=ep4;
+  ep4=ep3;
+  ep3=ep2;
+  ep2=ep1;
+  ep1=ep0;
+  ep0=ep;
+  ed=ep0-ep3;
+  
+  duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
+  
+  /**
+   *舵机限幅
+  */
+  if((duojiTemp <= duoji_left)||left_max_f)
+  {
+    ep0=-duojic_l/duoji_Kp;
+    duojiTemp = duoji_left;
+  }
+  if((duojiTemp >= duoji_right)||right_max_f)
+  {
+    ep0=duojic_r/duoji_Kp;
+    duojiTemp = duoji_right;
+  }
+  
+  duojiTemp_old=duojiTemp;
+  duoji=duojiTemp;
+  
+  duoji_ChangeDuty(duoji);
+  
+  if(duojiTemp==duoji_left)
+  {
+    left_max_f=true;
+    right_max_f=false;
+  }
+  else if(duojiTemp==duoji_right)
+  {
+    right_max_f=true;
+    left_max_f=false;
+  }
+  
+  if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)
+  {
+    stop=true;
+    beep_time=10;
+  }
+}
+
+void duoji_Control5(void)
+{
+  /**
+   *舵机方向控制
+  */
+  /**
+   *your own control
+  */
+  if(beep_time>0)
+  {
+    beep_time--;
+    Beep(true);
+  }
+  else
+  {
+    beep_time=0;
+    Beep(false);
+  }
+  
+  e1M2 = ad2_avg - ad1_avg;
+  e1P2 = ad1_avg + ad2_avg;
+  
+  e3M4 = ad4_avg - ad3_avg;
+  e3P4 = ad3_avg + ad4_avg;
+  
+  arg1=0.3;
+  arg2=0.6;  
+  arg3=0.6;
+  arg4=0.3;
+
+  cha = arg1 * e1M2 + arg2 * e3M4;
+  he = arg3 * (e1P2 + ad7_avg) + arg4 * e3P4;
+  
+  duoji_Kp=ABS(30000-12*ad7_avg);
+  //duoji_Kp=30000;
+  duoji_Kd=60000;
+  
+  if(left_max_f)
+  {
+    if((ad1_avg>ad2_avg&&ad1_avg>80)||(ad3_avg>ad4_avg&&ad3_avg<50))
+    {
+      left_max_f=false;
+      beep_time=10;
+    }
+  }
+  else if(right_max_f)
+  {
+    if((ad2_avg>ad1_avg&&ad2_avg>80)||(ad4_avg>ad3_avg&&ad4_avg<50))
+    {
+      right_max_f=false;
+      beep_time=10;
+    }
+  }
+  
+  if(he>70&&left_max_f==false&&right_max_f==false)
+  {
+    ep = cha / powf(he, 1.5);
+  }
+  else
+  {
+    ep=ep9;
+  }
+
+
+  ep9=ep8;
+  ep8=ep7;
+  ep7=ep6;
+  ep6=ep5;
+  ep5=ep4;
+  ep4=ep3;
+  ep3=ep2;
+  ep2=ep1;
+  ep1=ep0;
+  ep0=ep;
+  ed=ep2-ep4;
+  
+  duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
+  
+  /**
+   *舵机限幅
+  */
+  if((duojiTemp <= duoji_left)||left_max_f)
+  {
+    ep0=-duojic_l/duoji_Kp;
+    duojiTemp = duoji_left;
+  }
+  if((duojiTemp >= duoji_right)||right_max_f)
+  {
+    ep0=duojic_r/duoji_Kp;
+    duojiTemp = duoji_right;
+  }
+  
+  duojiTemp_old=duojiTemp;
+  duoji=duojiTemp;
+  
+  duoji_ChangeDuty(duoji);
+  
+  if(duojiTemp==duoji_left)
+  {
+    left_max_f=true;
+    right_max_f=false;
+    beep_time=10;
+  }
+  else if(duojiTemp==duoji_right)
+  {
+    right_max_f=true;
+    left_max_f=false;
+    beep_time=10;
+  }
+  
+  if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)
+  {
+    stop=true;
+    beep_time=10;
+  }
 }

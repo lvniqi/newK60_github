@@ -14,7 +14,7 @@
 #define duojic_r 1100
 #define duojic_l 1100
 //#define duoji_mid 4250 //新车的舵机中心值
-#define duoji_mid 4500
+#define duoji_mid 4600
 #define duoji_right (duoji_mid+duojic_r)
 #define duoji_left  (duoji_mid-duojic_l)
 
@@ -28,6 +28,11 @@ extern float ep1;
 extern float ep2;
 extern float ep3;
 extern float ep4;
+extern float ep5;
+extern float ep6;
+extern float ep7;
+extern float ep8;
+extern float ep9;
 extern float ed;
 
 extern float e1M2;
@@ -39,6 +44,8 @@ extern float e5P6;
 
 extern float cha;
 extern float he;
+extern float cha1;
+extern float he1;
 
 extern u32 duoji;
 extern u32 duojiTemp;
@@ -60,6 +67,8 @@ extern void duoji_Init(void); //舵机初始化
 extern void duoji_Control1(void); //舵机控制1
 extern void duoji_Control2(void); //舵机控制2
 extern void duoji_Control3(void); //舵机控制3
+extern void duoji_Control4(void); //舵机控制4
+extern void duoji_Control5(void); //舵机控制5
 
 extern float quan;
 
@@ -68,5 +77,10 @@ extern float near_x;
 
 extern bool SZ_left;
 extern bool SZ_right;
+
+extern float sum_h1;
+extern float sum_h2;
+extern float sum_v1;
+extern bool lock;
 
 #endif //__DUOJI_H

@@ -49,6 +49,11 @@ float ep1=0;
 float ep2=0;
 float ep3=0;
 float ep4=0;
+float ep5=0;
+float ep6=0;
+float ep7=0;
+float ep8=0;
+float ep9=0;
 float ed=0;
 float ed_old=0;
 
@@ -61,6 +66,8 @@ float e5P6=0;
 
 float cha = 0;
 float he;
+float cha1 = 0;
+float he1;
 
 float far_x=0;
 float near_x=0;
@@ -71,6 +78,11 @@ u32 duojiTemp_old=duoji_mid;
 
 bool SZ_left=false;
 bool SZ_right=false;
+
+float sum_h1;
+float sum_h2;
+float sum_v1;
+bool lock;
 
 /**
  *电机参数

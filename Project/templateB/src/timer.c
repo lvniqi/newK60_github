@@ -60,7 +60,7 @@ void PIT0_CallBack(void)
     ad5_avg=ad5/duoji_ControlTime;ad6_avg=ad6/duoji_ControlTime;
     ad7_avg=ad7/duoji_ControlTime;ad8_avg=ad8/duoji_ControlTime;
     
-    duoji_Control3(); //舵机控制程序3
+    duoji_Control5(); //舵机控制程序3
     
     ad1=0;ad2=0;ad3=0;ad4=0;ad5=0;ad6=0;ad7=0;ad8=0;
   }
