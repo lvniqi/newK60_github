@@ -249,7 +249,7 @@ int nrf24l01_write_packet(uint8_t *buf, uint32_t len)
 int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
 {
 	uint8_t sta,rev_len;
-    sta = read_reg(STATUS);
+        sta = read_reg(STATUS);
 	if(sta & STATUS_RX_DR_MASK)
 	{
         /* clear pendign bit */

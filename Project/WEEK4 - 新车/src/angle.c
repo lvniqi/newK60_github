@@ -39,17 +39,24 @@ void ANGLE_Control(void){
   float vertical_1_cut,vertical_1_sum;
   vertical_1_cut = ADCDATA.vertical_1[1] - ADCDATA.vertical_1[0];
   vertical_1_sum = MyADC_V1_Sum(&ADCDATA);
-  if (
-      (horizontal_2_sum/2>horizontal_1_sum &&
-       horizontal_2_sum/3>vertical_1_sum &&
-       ANGLE_SEQ.lock != true)
+  int temp_angle = Sequeue_Get_Rear(&ANGLE_SEQ);
+  if (((
+       horizontal_2_sum/2>horizontal_1_sum &&
+       horizontal_2_sum/3>vertical_1_sum
+       )||(
+       ANGLE_is_edge(temp_angle)&&
+       vertical_1_sum+horizontal_1_sum <2000
+       ))&&ANGLE_SEQ.lock != true
       ){
     ANGLE_goto_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
     ANGLE_SEQ.lock = true;
     //Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>3500){
+  else if(horizontal_1_sum+vertical_1_sum>3800&&
+           ANGLE_SEQ.lock == true
+          ){
     ANGLE_SEQ.lock = false;
+    Beep_Enable();
   }
   //如果前后差太大 更相信后方
   float temp1 = horizontal_1_cut/horizontal_1_sum;
@@ -100,86 +107,5 @@ void ANGLE_Control(void){
     Sequeue_In_Queue(&ANGLE_SEQ, angle);
     Sequeue_Out_Queue(&ANGLE_SEQ);
   }
-  
-  //测试！
-  /*
-  if((vertical_1_cut>=320)&&
-     (ADCDATA.vertical_1[0]-ADCDATA.horizontal_1[1]>=320)&&
-      ANGLE_SEQ.right_lock_max==false&&
-      MyADC_H1_Average(&ADCDATA)<1600){
-    ANGLE_SEQ.left_lock_max=true;
-  }
-  else if((vertical_1_cut<=-320)&&
-           (ADCDATA.vertical_1[1]-ADCDATA.horizontal_1[1]>=320)&&
-            ANGLE_SEQ.left_lock_max==false&&
-            MyADC_H1_Average(&ADCDATA)<1600){
-    ANGLE_SEQ.right_lock_max=true;
-  }
-  if(MyADC_H1_Average(&ADCDATA)>1600||
-     MyADC_H2_Average(&ADCDATA)>1600||
-     MyADC_V1_Average(&ADCDATA)>1600){
-    ANGLE_SEQ.left_lock_max=false;
-    ANGLE_SEQ.right_lock_max=false;
-  }
-  else if(true==ANGLE_SEQ.left_lock_max &&
-     ADCDATA.horizontal_1[2] > ADCDATA.horizontal_1[0]&&
-     ADCDATA.horizontal_1[2] > ADCDATA.horizontal_1[1]){
-    ANGLE_SEQ.left_lock_max=false;
-  }
-  else if(true==ANGLE_SEQ.right_lock_max &&
-     ADCDATA.horizontal_1[0] > ADCDATA.horizontal_1[1]&&
-     ADCDATA.horizontal_1[0] > ADCDATA.horizontal_1[2]){
-    ANGLE_SEQ.right_lock_max=false;
-  }
-  float arg1=0.05/(1+exp(-5+0.004*ADCDATA.horizontal_1[1]))+0.3; //0.3
-  float arg2=0.1/(1+exp(5-0.004*ADCDATA.horizontal_1[1]))+0.6;  //0.6  
-  float arg3=0.6;
-  float arg4=0.3;
-  float cha = arg1 * horizontal_1_cut + arg2 * vertical_1_cut;
-  float he = arg3 * horizontal_1_sum + arg4 * vertical_1_sum;
-  float far_x;
-  float near_x;
-  //要不要考虑丢线有待实验
-  if(horizontal_1_sum>200){
-    far_x = horizontal_1_cut/horizontal_1_sum;
-  }
-  else{
-    far_x = 0;
-  }
-  if(horizontal_2_sum>200){
-    near_x = horizontal_2_cut/horizontal_2_sum;
-  }
-  else{
-    near_x = 0;
-  }
-  float duoji_Kp=ABS(70000-ADCDATA.horizontal_1[1]);
-  float duoji_Kd=20000;
-  float ed = Sequeue_Get_Rear(&ANGLE_P_SEQ)-Sequeue_Get_One(&ANGLE_P_SEQ,ANGLE_P_SEQ.len-3);
-  if(he>50){
-    if(MyADC_H2_Sum(&ADCDATA)>MyADC_H1_Sum(&ADCDATA)+MyADC_V1_Sum(&ADCDATA)){
-      pass;
-    }
-    else if(MyADC_H2_Sum(&ADCDATA)/3 < MyADC_H1_Sum(&ADCDATA)||
-       MyADC_H2_Sum(&ADCDATA)/3 < MyADC_V1_Sum(&ADCDATA)){
-        Sequeue_Out_Queue(&ANGLE_P_SEQ);
-        float ep = cha / powf(he, 1.5);// + powf((near_x-far_x),3)*0.5; //powf((far_x-near_x),3)可以有效弯道内切以及小S直冲
-        Sequeue_In_Queue(&ANGLE_P_SEQ,(ep));
-    }
-  }
-  int duojiTemp;
-  if(true == ANGLE_SEQ.left_lock_max){
-    duojiTemp=ANGLE_LIMIT_LEFT;
-  }
-  else if(true == ANGLE_SEQ.right_lock_max){
-    duojiTemp=ANGLE_LIMIT_RIGHT;
-  }
-  else{
-    duojiTemp = duoji_Kp * Sequeue_Get_Rear(&ANGLE_P_SEQ) + ANGLE_MID;
-    //duojiTemp = duoji_Kp*Sequeue_Get_Rear(&ANGLE_P_SEQ) + duoji_Kd * ed + ANGLE_MID;
-    
-  }
-  Sequeue_Out_Queue(&ANGLE_SEQ);
-  ANGLE_Size_control(duojiTemp);
-  Sequeue_In_Queue(&ANGLE_SEQ,duojiTemp);*/
   ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
 }

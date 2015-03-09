@@ -28,7 +28,8 @@ void NFR24l01_Init(){
     OLED_P6x8Str(0, 0, "2401 ERROR");
   } nrf24l01_set_rx_mode();
 }
-
+char temp_rx[32];
+u32 temp_rx_len;
 int main(void){
   DelayInit();
   PT_INIT(&thread[0], 5); //5ms一次ad采集
@@ -41,6 +42,9 @@ int main(void){
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
+  nrf24l01_set_rx_mode();
+  nrf24l01_read_packet(temp_rx,&temp_rx_len);
+  
   while (1){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器
