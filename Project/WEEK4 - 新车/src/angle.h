@@ -19,7 +19,6 @@
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
   #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-600||(angle) <ANGLE_LIMIT_LEFT+600)
-  #define ANGLE_is_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-100||(angle) <ANGLE_LIMIT_LEFT+100)
   #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-600){(angle) = ANGLE_LIMIT_RIGHT;}\
                                          else if((angle) <ANGLE_LIMIT_LEFT+600){(angle) = ANGLE_LIMIT_LEFT;}}   
   #define ANGLE_Size_control(angle){ if(angle > ANGLE_LIMIT_RIGHT) angle =\

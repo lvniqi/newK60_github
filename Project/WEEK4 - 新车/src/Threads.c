@@ -70,7 +70,7 @@ PT_THREAD(SHOW(PT *pt)){
     pt->ready = 0;  
     //’‚¿Ô–¥œ‘ æ”Ôæ‰
     MyADC_Show(&ADCDATA);
-    //SPEED_COUNTER_Show(SPEED_CURR);
+    SPEED_COUNTER_Show(SPEED_CURR);
   }
   PT_END(pt);
 }

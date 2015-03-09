@@ -113,5 +113,5 @@ void MyADC_Show(adc *adcdata){
   OLED_PrintShort(60, 4, (adcdata->vertical_1)[1]);
   OLED_PrintShort(60, 5, (adcdata->horizontal_2)[0]);
   OLED_PrintShort(60, 6, (adcdata->horizontal_2)[1]);
-  OLED_PrintShort(60,7,adcdata->protect);
+  //OLED_PrintShort(60,7,adcdata->protect);
 }

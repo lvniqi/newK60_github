@@ -36,7 +36,7 @@ int main(void){
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   BaseTimer_Init(); //1ms基本时钟
   OLED_Init(); //OLED初始化
-  NFR24l01_Init();
+  //NFR24l01_Init();
   ANGLE_Init(); //舵机初始化
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
