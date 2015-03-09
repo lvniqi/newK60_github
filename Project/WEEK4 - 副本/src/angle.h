@@ -16,8 +16,12 @@
    */
   #define ANGLE_LIMIT 1200
   #define ANGLE_MID 4600
+  #define ANGLE_LEFT_LOCK 1
+  #define ANGLE_RIGHT_LOCK 2
+  #define ANGLE_NOLOCK 0
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
+  #define ANGLE_type_edge(angle)        ((angle)>ANGLE_MID?ANGLE_RIGHT_LOCK:ANGLE_LEFT_LOCK)
   #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-600||(angle) <ANGLE_LIMIT_LEFT+600)
   #define ANGLE_is_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-100||(angle) <ANGLE_LIMIT_LEFT+100)
   #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-600){(angle) = ANGLE_LIMIT_RIGHT;}\
@@ -36,7 +40,7 @@
   extern angle_sequeue ANGLE_SEQ;
   extern u32 angle;
 
-  #define ANGLE_ChangeDuty(duty) (FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, duty))
+  #define ANGLE_ChangeDuty(duty) {int temp = (duty);ANGLE_Size_control(temp);FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, temp);}
   //舵机打角程序
 
   extern void ANGLE_Init(void); //舵机初始化

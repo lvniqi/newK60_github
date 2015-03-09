@@ -28,7 +28,7 @@ void NFR24l01_Init(){
     OLED_P6x8Str(0, 0, "2401 ERROR");
   } nrf24l01_set_rx_mode();
 }
-char temp_rx[32];
+int temp_rx;
 u32 temp_rx_len;
 int main(void){
   DelayInit();
@@ -37,18 +37,20 @@ int main(void){
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   BaseTimer_Init(); //1ms基本时钟
   OLED_Init(); //OLED初始化
-  //NFR24l01_Init();
+  NFR24l01_Init();
   ANGLE_Init(); //舵机初始化
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
   nrf24l01_set_rx_mode();
-  nrf24l01_read_packet(temp_rx,&temp_rx_len);
+  
   
   while (1){
-    GetAd(&thread[0]); //ad采集
-    BEEP(&thread[1]); //蜂鸣器
-    SHOW(&thread[2]);//显示数据
+    //nrf24l01_read_packet((u8*)&temp_rx,&temp_rx_len);
+    //ANGLE_ChangeDuty(temp_rx);
+    //GetAd(&thread[0]); //ad采集
+    //BEEP(&thread[1]); //蜂鸣器
+    //SHOW(&thread[2]);//显示数据
     //如果运行结束
     //if (GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();

@@ -13,8 +13,7 @@ void ANGLE_Init(void){
   FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, ANGLE_MID);
   Sequeue_Init(&ANGLE_P_SEQ, _ANGLE_P_SEQ_DATABASE, ANGLE_P_SEQ_LEN);
   Sequeue_Init(&ANGLE_SEQ, _ANGLE_SEQ_DATABASE, ANGLE_SEQ_LEN);
-  ANGLE_SEQ.left_lock_max = false;
-  ANGLE_SEQ.right_lock_max = false;
+  ANGLE_SEQ.lock = ANGLE_NOLOCK;
   for (int i = 0; i < ANGLE_P_SEQ_LEN - 1; i++){
     Sequeue_In_Queue(&ANGLE_P_SEQ, 0);
   }
@@ -46,17 +45,27 @@ void ANGLE_Control(void){
        )||(
        ANGLE_is_edge(temp_angle)&&
        vertical_1_sum+horizontal_1_sum <2000
-       ))&&ANGLE_SEQ.lock != true
+       ))&&ANGLE_SEQ.lock == ANGLE_NOLOCK
       ){
     ANGLE_goto_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
-    ANGLE_SEQ.lock = true;
+    ANGLE_SEQ.lock = ANGLE_type_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
     //Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>3800&&
-           ANGLE_SEQ.lock == true
+  else if(horizontal_1_sum+vertical_1_sum>3200&&
+           horizontal_2_sum>1000&&
+           //horizontal_1_cut+vertical_1_cut<-200&&
+           ANGLE_SEQ.lock == ANGLE_LEFT_LOCK
           ){
-    ANGLE_SEQ.lock = false;
+    ANGLE_SEQ.lock = ANGLE_NOLOCK;
     Beep_Enable();
+  }
+  else if(horizontal_1_sum+vertical_1_sum>3200&&
+           horizontal_2_sum>1000&&
+           //horizontal_1_cut+vertical_1_cut>200&&
+           ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK
+          ){
+    ANGLE_SEQ.lock = ANGLE_NOLOCK;
+    //Beep_Enable();
   }
   //如果前后差太大 更相信后方
   float temp1 = horizontal_1_cut/horizontal_1_sum;
@@ -82,10 +91,9 @@ void ANGLE_Control(void){
   }
   Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
   Sequeue_Out_Queue(&ANGLE_P_SEQ);
-  float ed = Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 2) - Sequeue_Get_One
-    (&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 4);
+  float ed = Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 2) - 
+    Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 4);
   angle = ANGLE_MID + (angle_kp *ep + angle_kd * ed);
-  ANGLE_Size_control(angle);
   /*if ((MyADC_H1_Average(&ADCDATA) < 150 and 
        MyADC_H1_Average(&ADCDATA) <MyADC_H2_Average(&ADCDATA) / 3 and 
        MyADC_V1_Average(&ADCDATA) < 200)or

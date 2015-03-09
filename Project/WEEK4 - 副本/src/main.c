@@ -41,6 +41,7 @@ int main(void){
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
+  nrf24l01_set_tx_mode();
   while (1){
     GetAd(&thread[0]); //ad采集
     BEEP(&thread[1]); //蜂鸣器

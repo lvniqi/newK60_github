@@ -29,6 +29,7 @@ PT_THREAD(GetAd(PT *pt)){
     }
   }
   ANGLE_Control();
+  nrf24l01_write_packet((u8*)&(Sequeue_Get_Rear(&ANGLE_SEQ)),2);
   if (STOP_FLAG > 100){
     SPEED_Stop();
   }

@@ -1991,6 +1991,9 @@
       <name>$PROJ_DIR$\..\src\main.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\src\my2401.h</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\src\myadc.c</name>
     </file>
     <file>

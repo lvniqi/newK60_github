@@ -50,9 +50,8 @@ typedef struct _angle_sequeue
         u16 len;
         u16 len_should_cut;
         u16 len_max;
-        bool lock;
-        bool left_lock_max;
-        bool right_lock_max;
+        u8 lock;
+        
 } angle_sequeue;
 typedef struct _float_sequeue
 {

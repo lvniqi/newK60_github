@@ -200,7 +200,7 @@ void nrf24l01_set_rx_mode(void)
     value = read_reg(CONFIG);
     value |= CONFIG_PRIM_RX_MASK;
     write_reg(CONFIG, value);
-	NRF24L01_CE_HIGH();
+    NRF24L01_CE_HIGH();
 }
 
 //启动NRF24L01发送一次数据
