@@ -30,5 +30,4 @@
    ***********************************************************************/
   extern void beep_Init(void);
   extern float abs(float a);
-  extern u32 time;
 #endif

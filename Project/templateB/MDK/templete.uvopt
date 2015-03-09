@@ -744,7 +744,7 @@
       <Focus>0</Focus>
       <ColumnNumber>10</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>16</TopLine>
+      <TopLine>57</TopLine>
       <CurrentLine>69</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\main.c</PathWithFileName>
@@ -798,10 +798,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>9</ColumnNumber>
+      <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>663</TopLine>
-      <CurrentLine>685</CurrentLine>
+      <TopLine>719</TopLine>
+      <CurrentLine>739</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\duoji.c</PathWithFileName>
       <FilenameWithoutPath>duoji.c</FilenameWithoutPath>
@@ -816,7 +816,7 @@
       <Focus>0</Focus>
       <ColumnNumber>18</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>42</TopLine>
+      <TopLine>51</TopLine>
       <CurrentLine>63</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\src\timer.c</PathWithFileName>
