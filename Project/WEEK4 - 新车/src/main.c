@@ -11,6 +11,13 @@
 #include "spi.h"
 #include "nrf24l01.h"
 
+int temp_rx;
+u32 temp_rx_len=0;
+void isr(uint32_t pinArray){
+  nrf24l01_read_packet((u8*)&temp_rx,&temp_rx_len);
+  OLED_PrintShort(60,0,temp_rx);
+}
+
 void NFR24l01_Init(){
   /* 初始化2401模块*/
   static struct spi_bus bus;
@@ -26,10 +33,13 @@ void NFR24l01_Init(){
   nrf24l01_init(&bus, 0);
   while (nrf24l01_probe()){
     OLED_P6x8Str(0, 0, "2401 ERROR");
-  } nrf24l01_set_rx_mode();
+  } 
+  GPIO_QuickInit(HW_GPIOA,11,kGPIO_Mode_IPU);
+  GPIO_CallbackInstall(HW_GPIOA,isr);
+  GPIO_ITDMAConfig(HW_GPIOA, 11, kGPIO_IT_FallingEdge, true);
+  nrf24l01_set_rx_mode();
 }
-int temp_rx;
-u32 temp_rx_len;
+
 int main(void){
   DelayInit();
   PT_INIT(&thread[0], 5); //5ms一次ad采集
@@ -42,11 +52,11 @@ int main(void){
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
-  nrf24l01_set_rx_mode();
-  
-  
   while (1){
     //nrf24l01_read_packet((u8*)&temp_rx,&temp_rx_len);
+    //if(temp_rx_len){
+    //  MyADC_Show(&ADCDATA);
+    //}
     //ANGLE_ChangeDuty(temp_rx);
     //GetAd(&thread[0]); //ad采集
     //BEEP(&thread[1]); //蜂鸣器

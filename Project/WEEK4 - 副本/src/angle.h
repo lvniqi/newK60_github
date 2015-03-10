@@ -22,14 +22,14 @@
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
   #define ANGLE_type_edge(angle)        ((angle)>ANGLE_MID?ANGLE_RIGHT_LOCK:ANGLE_LEFT_LOCK)
-  #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-600||(angle) <ANGLE_LIMIT_LEFT+600)
+  #define ANGLE_almost_edge(angle)      ((angle) > ANGLE_MID+250||(angle) <ANGLE_MID-250)
   #define ANGLE_is_edge(angle)      ((angle) > ANGLE_LIMIT_RIGHT-100||(angle) <ANGLE_LIMIT_LEFT+100)
   #define ANGLE_goto_edge(angle)        {if((angle) > ANGLE_LIMIT_RIGHT-600){(angle) = ANGLE_LIMIT_RIGHT;}\
                                          else if((angle) <ANGLE_LIMIT_LEFT+600){(angle) = ANGLE_LIMIT_LEFT;}}   
   #define ANGLE_Size_control(angle){ if(angle > ANGLE_LIMIT_RIGHT) angle =\
   ANGLE_LIMIT_RIGHT;if(angle<ANGLE_LIMIT_LEFT)angle = ANGLE_LIMIT_LEFT;}
 
-  #define arg1 30
+  #define arg1 25
   #define arg2 (100-arg1)
   extern float angle_kp; //舵机控制P值
   extern float angle_kd; //舵机控制d值

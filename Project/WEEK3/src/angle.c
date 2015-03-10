@@ -13,8 +13,6 @@ void ANGLE_Init(void){
   FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, ANGLE_MID);
   Sequeue_Init(&ANGLE_P_SEQ, _ANGLE_P_SEQ_DATABASE, ANGLE_P_SEQ_LEN);
   Sequeue_Init(&ANGLE_SEQ, _ANGLE_SEQ_DATABASE, ANGLE_SEQ_LEN);
-  ANGLE_SEQ.left_lock_max = false;
-  ANGLE_SEQ.right_lock_max = false;
   for (int i = 0; i < ANGLE_P_SEQ_LEN - 1; i++){
     Sequeue_In_Queue(&ANGLE_P_SEQ, 0);
   }

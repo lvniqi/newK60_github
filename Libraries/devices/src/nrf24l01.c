@@ -195,7 +195,7 @@ void nrf24l01_set_rx_mode(void)
     /* reflash data */
     value = FLUSH_RX;
     spi_write(&device, &value, 1, true);
-	NRF24L01_CE_LOW();
+    NRF24L01_CE_LOW();
     /* set CONFIG_PRIM_RX_MASK to enable Rx */
     value = read_reg(CONFIG);
     value |= CONFIG_PRIM_RX_MASK;

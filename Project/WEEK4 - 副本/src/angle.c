@@ -1,6 +1,6 @@
 #include "angle.h"
-float angle_kp = 2394; //舵机控制P值
-float angle_kd = 5814; //舵机控制d值
+float angle_kp = 4100; //舵机控制P值
+float angle_kd = 6100; //舵机控制d值
 u32 angle = ANGLE_MID;
 
 float _ANGLE_P_SEQ_DATABASE[ANGLE_P_SEQ_LEN];
@@ -29,7 +29,7 @@ void ANGLE_Control(void){
   //第一排 左侧减右侧
   float horizontal_1_cut = ADCDATA.horizontal_1[2] - ADCDATA.horizontal_1[0];
   //第二排 左侧减右侧
-  float horizontal_2_cut = ADCDATA.horizontal_2[1] - ADCDATA.horizontal_2[0];
+  float horizontal_2_cut = ADCDATA.horizontal_2[2] - ADCDATA.horizontal_2[0];
   //第一排 总和
   float horizontal_1_sum = MyADC_H1_Sum(&ADCDATA);
   //第二排 总和
@@ -40,32 +40,34 @@ void ANGLE_Control(void){
   vertical_1_sum = MyADC_V1_Sum(&ADCDATA);
   int temp_angle = Sequeue_Get_Rear(&ANGLE_SEQ);
   if (((
-       horizontal_2_sum/2>horizontal_1_sum &&
-       horizontal_2_sum/3>vertical_1_sum
+       horizontal_2_sum/3>horizontal_1_sum &&
+       horizontal_2_sum/4>vertical_1_sum
        )||(
        ANGLE_is_edge(temp_angle)&&
        vertical_1_sum+horizontal_1_sum <2000
        ))&&ANGLE_SEQ.lock == ANGLE_NOLOCK
       ){
     ANGLE_goto_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
-    ANGLE_SEQ.lock = ANGLE_type_edge(Sequeue_Get_Rear(&ANGLE_SEQ));
+    ANGLE_SEQ.lock = ANGLE_type_edge(angle);
     //Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>3200&&
-           horizontal_2_sum>1000&&
+  else if(horizontal_1_sum+vertical_1_sum>3500&&
+           horizontal_2_sum>1500&&
            //horizontal_1_cut+vertical_1_cut<-200&&
+           //horizontal_1_cut+vertical_1_cut>-600&&
            ANGLE_SEQ.lock == ANGLE_LEFT_LOCK
           ){
     ANGLE_SEQ.lock = ANGLE_NOLOCK;
     Beep_Enable();
   }
-  else if(horizontal_1_sum+vertical_1_sum>3200&&
-           horizontal_2_sum>1000&&
+  else if(horizontal_1_sum+vertical_1_sum>3500&&
+           horizontal_2_sum>1500&&
            //horizontal_1_cut+vertical_1_cut>200&&
+           //horizontal_1_cut+vertical_1_cut<600&&
            ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK
           ){
     ANGLE_SEQ.lock = ANGLE_NOLOCK;
-    //Beep_Enable();
+    Beep_Enable();
   }
   //如果前后差太大 更相信后方
   float temp1 = horizontal_1_cut/horizontal_1_sum;
@@ -81,10 +83,10 @@ void ANGLE_Control(void){
   }
   */
   float cha = arg1 * horizontal_1_cut + arg2 * vertical_1_cut;
-  float he =  horizontal_1_sum + vertical_1_sum;
+  float he =  horizontal_1_sum + 0.5*vertical_1_sum;
   float ep;
   if (he > 50&&!(ANGLE_SEQ.lock)){
-    ep = cha / powf(he, 1.5);
+    ep = cha / powf(he, 1.6);
   }
   else{
     ep = Sequeue_Get_Rear(&ANGLE_P_SEQ);
