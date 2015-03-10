@@ -21,9 +21,9 @@ PT_THREAD(GetAd(PT *pt)){
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
   ANGLE_Control();
-  if (MyADC_H1_Average(&ADCDATA) < 100 &&
-      MyADC_H2_Average(&ADCDATA) < 100 &&
-      MyADC_V1_Average(&ADCDATA) < 100){
+  if (MyADC_H1_Average(&ADCDATA) < 50 &&
+      MyADC_H2_Average(&ADCDATA) < 50 &&
+      MyADC_V1_Average(&ADCDATA) < 50){
     if (STOP_FLAG < 100){
       STOP_FLAG = 100;
     }
