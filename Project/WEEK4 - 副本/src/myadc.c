@@ -41,8 +41,9 @@ void MyADC_Get(adc *adcdata){
   adcdata->horizontal_1[2] = ADC_WaitReadValue(ADC0_SE9_PB1); //第一排右侧
   adcdata->vertical_1[1] = ADC_QuickReadValue(ADC1_SE11_PB05); //垂直右侧
   adcdata->horizontal_2[0] = ADC_QuickReadValue(ADC1_SE12_PB06); //第二排左侧
-  adcdata->horizontal_2[1] = ADC_QuickReadValue(ADC1_SE13_PB07); //第二排右侧
-  adcdata->protect = ADC_QuickReadValue(ADC1_SE15_PB11); //第二排右侧
+  adcdata->horizontal_2[1] = ADC_QuickReadValue(ADC1_SE15_PB11); //第二排中侧
+  adcdata->horizontal_2[2] = ADC_QuickReadValue(ADC1_SE13_PB07); //第二排右侧
+  
   Sequeue_In_Queue(&ADC_SEQ, ADCDATA);
   Sequeue_Out_Queue(&ADC_SEQ);
 }
@@ -113,5 +114,5 @@ void MyADC_Show(adc *adcdata){
   OLED_PrintShort(60, 4, (adcdata->vertical_1)[1]);
   OLED_PrintShort(60, 5, (adcdata->horizontal_2)[0]);
   OLED_PrintShort(60, 6, (adcdata->horizontal_2)[1]);
-  OLED_PrintShort(60,7,adcdata->protect);
+  OLED_PrintShort(60,7,  (adcdata->horizontal_2)[2]);
 }

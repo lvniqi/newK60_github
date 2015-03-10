@@ -20,19 +20,15 @@ PT_THREAD(GetAd(PT *pt)){
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
+  ANGLE_Control();
   if (MyADC_H1_Average(&ADCDATA) < 100 &&
       MyADC_H2_Average(&ADCDATA) < 100 &&
-      MyADC_V1_Average(&ADCDATA) < 100 &&
-      ADCDATA.protect < 300){
-    if (STOP_FLAG <= 100){
-      STOP_FLAG++;
+      MyADC_V1_Average(&ADCDATA) < 100){
+    if (STOP_FLAG < 100){
+      STOP_FLAG = 100;
     }
   }
-  ANGLE_Control();
-  nrf24l01_write_packet((u8*)&(Sequeue_Get_Rear(&ANGLE_SEQ)),2);
-  if (STOP_FLAG > 100){
-    SPEED_Stop();
-  }
+  //nrf24l01_write_packet((u8*)&(Sequeue_Get_Rear(&ANGLE_SEQ)),2);
   PT_END(pt);
 }
 
@@ -64,6 +60,12 @@ PT_THREAD(BEEP(PT *pt)){
   }
   PT_END(pt);
 }
+/********************************************************************
+   * 名称 : PT_THREAD( SHOW(PT *pt) )
+   * 功能 : 显示数据
+   * 输入 : 无
+   * 输出 : 无
+   ***********************************************************************/
 PT_THREAD(SHOW(PT *pt)){
   PT_BEGIN(pt);
   while(true){
@@ -72,6 +74,23 @@ PT_THREAD(SHOW(PT *pt)){
     //这里写显示语句
     MyADC_Show(&ADCDATA);
     //SPEED_COUNTER_Show(SPEED_CURR);
+  }
+  PT_END(pt);
+}
+/********************************************************************
+   * 名称 : PT_THREAD( STOP(PT *pt) )
+   * 功能 : 停车数据
+   * 输入 : 无
+   * 输出 : 无
+   ***********************************************************************/
+PT_THREAD(STOP(PT *pt)){
+  PT_BEGIN(pt);
+  while(true){
+    PT_WAIT_UNTIL(pt, pt->ready);
+    pt->ready = 0;  
+    if (STOP_FLAG < 100){
+      STOP_FLAG +=5;//20s停车
+    }
   }
   PT_END(pt);
 }

@@ -5,7 +5,7 @@
   #include "pt.h"
   #include "sequeue.h"
   #include "nrf24l01.h"
-  #define THREAD_NUM 5//线程数为5
+  #define THREAD_NUM 8//线程数为8
   #include "threads.h"
   extern u32 RunTime;
   /********************************************************************

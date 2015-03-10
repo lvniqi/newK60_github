@@ -4,13 +4,13 @@
   #include "adc.h"
   #include "threads.h"
   #define AD_H1_LEN 3
-  #define AD_H2_LEN 2
+  #define AD_H2_LEN 3
   #define AD_V1_LEN 2
   typedef struct _adc{
     u16 horizontal_1[AD_H1_LEN]; //前方水平电感
     u16 horizontal_2[AD_H2_LEN]; //后方水平电感
     u16 vertical_1[AD_V1_LEN]; //垂直电感
-    u16 protect; //保护电感
+    //u16 protect; //保护电感
   } adc;
 
   typedef struct _adc_sequeue{
