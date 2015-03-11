@@ -62,6 +62,7 @@ extern bool left;
 extern bool left_max_f;
 
 #define duoji_ChangeDuty(duty) (FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, duty)) //舵机打角程序
+#define duoji_is_edge(duoji)      ((duoji) > duoji_right-100||(duoji) <duoji_left+100)
 
 extern void duoji_Init(void); //舵机初始化
 extern void duoji_Control1(void); //舵机控制1
@@ -69,6 +70,7 @@ extern void duoji_Control2(void); //舵机控制2
 extern void duoji_Control3(void); //舵机控制3
 extern void duoji_Control4(void); //舵机控制4
 extern void duoji_Control5(void); //舵机控制5
+extern void duoji_Control6(void); //舵机控制6
 
 extern float quan;
 
@@ -82,5 +84,7 @@ extern float sum_h1;
 extern float sum_h2;
 extern float sum_v1;
 extern bool lock;
+extern bool left_lock;
+extern bool right_lock;
 
 #endif //__DUOJI_H

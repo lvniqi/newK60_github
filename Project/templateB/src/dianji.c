@@ -85,7 +85,7 @@ void dianji_PID(void)
   sp_e0_last_last=sp_e0_last;
   sp_e0_last=sp_e0;
   
-  sp_expect=(u32)(158-4.5*powf(2.7,-(ad7_avg/46.5-2.6642)));
+  sp_expect=(u32)(160-4.7*powf(2.7,-(ad7_avg/46.5-2.6642)));
   
   sp_e0=sp_expect-sp;
   sp_e1=sp_e0-sp_e0_last;

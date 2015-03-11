@@ -1,0 +1,26 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
+
+entity phase_acc is
+	port
+	(
+		clk:in std_logic;
+		freqin:in std_logic_vector(31 downto 0);
+		romaddr:out std_logic_vector(9 downto 0)
+	);
+	end phase_acc;
+architecture one of phase_acc is
+	signal acc:std_logic_vector(31 downto 0);
+	begin
+	process(clk)
+	begin
+		if(clk'event and clk='1')
+		then
+			acc<=acc+freqin;
+			--acc<=acc+"00000000000000110100011011011100";
+		end if;
+	end process;
+	romaddr<=acc(31 downto 22);						
+end one;

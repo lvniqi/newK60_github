@@ -1,0 +1,116 @@
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tsu
+Slack          : N/A
+Required Time  : None
+Actual Time    : 9.074 ns
+From           : AD[15]
+To             : LATCH_ADDR:inst|CS_FREQ_RD_H
+From Clock     : --
+To Clock       : NADV
+Failed Paths   : 0
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 17.904 ns
+From           : FREW:inst1|74273:inst|17
+To             : AD[2]
+From Clock     : NADV
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case tpd
+Slack          : N/A
+Required Time  : None
+Actual Time    : 13.441 ns
+From           : NOE
+To             : AD[2]
+From Clock     : --
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case th
+Slack          : N/A
+Required Time  : None
+Actual Time    : 1.911 ns
+From           : NOE
+To             : LATCH_DATA:inst30|DATA[0]_102
+From Clock     : --
+To Clock       : NOE
+Failed Paths   : 0
+
+Type           : Clock Setup: 'PLL80M:inst6|altpll:altpll_component|_clk2'
+Slack          : 0.015 ns
+Required Time  : 100.00 MHz ( period = 10.000 ns )
+Actual Time    : N/A
+From           : phase_acc:inst27|acc[30]
+To             : RAM2PORT:inst70|altsyncram:altsyncram_component|altsyncram_acr1:auto_generated|ram_block1a4~portb_address_reg8
+From Clock     : PLL80M:inst6|altpll:altpll_component|_clk1
+To Clock       : PLL80M:inst6|altpll:altpll_component|_clk2
+Failed Paths   : 0
+
+Type           : Clock Setup: 'PLL80M:inst6|altpll:altpll_component|_clk1'
+Slack          : 4.969 ns
+Required Time  : 100.00 MHz ( period = 10.000 ns )
+Actual Time    : 198.77 MHz ( period = 5.031 ns )
+From           : phase_acc:inst27|acc[1]
+To             : phase_acc:inst27|acc[31]
+From Clock     : PLL80M:inst6|altpll:altpll_component|_clk1
+To Clock       : PLL80M:inst6|altpll:altpll_component|_clk1
+Failed Paths   : 0
+
+Type           : Clock Setup: 'NWE'
+Slack          : N/A
+Required Time  : None
+Actual Time    : 62.63 MHz ( period = 15.968 ns )
+From           : LATCH_DATA:inst30|DATA[0]_102
+To             : TEMP:inst7|DOUT[0]
+From Clock     : NWE
+To Clock       : NWE
+Failed Paths   : 0
+
+Type           : Clock Hold: 'PLL80M:inst6|altpll:altpll_component|_clk1'
+Slack          : 1.155 ns
+Required Time  : 100.00 MHz ( period = 10.000 ns )
+Actual Time    : N/A
+From           : phase_acc:inst27|acc[17]
+To             : phase_acc:inst27|acc[17]
+From Clock     : PLL80M:inst6|altpll:altpll_component|_clk1
+To Clock       : PLL80M:inst6|altpll:altpll_component|_clk1
+Failed Paths   : 0
+
+Type           : Clock Hold: 'PLL80M:inst6|altpll:altpll_component|_clk2'
+Slack          : 2.943 ns
+Required Time  : 100.00 MHz ( period = 10.000 ns )
+Actual Time    : N/A
+From           : RAM2PORT:inst70|altsyncram:altsyncram_component|altsyncram_acr1:auto_generated|ram_block1a0~porta_datain_reg3
+To             : RAM2PORT:inst70|altsyncram:altsyncram_component|altsyncram_acr1:auto_generated|ram_block1a3~porta_memory_reg0
+From Clock     : PLL80M:inst6|altpll:altpll_component|_clk2
+To Clock       : PLL80M:inst6|altpll:altpll_component|_clk2
+Failed Paths   : 0
+
+Type           : Clock Hold: 'NWE'
+Slack          : Not operational: Clock Skew > Data Delay
+Required Time  : None
+Actual Time    : N/A
+From           : TEMP:inst7|DOUT[11]
+To             : FREW:inst1|74273:inst9|16
+From Clock     : NWE
+To Clock       : NWE
+Failed Paths   : 32
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 32
+
+--------------------------------------------------------------------------------------
+

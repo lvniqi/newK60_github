@@ -1,0 +1,76 @@
+--------------------------------------------------------------------------------------
+Timing Analyzer Summary
+--------------------------------------------------------------------------------------
+
+Type           : Worst-case tsu
+Slack          : N/A
+Required Time  : None
+Actual Time    : 6.066 ns
+From           : AD[8]
+To             : LATCH_ADDR:inst|CS1
+From Clock     : --
+To Clock       : NADV
+Failed Paths   : 0
+
+Type           : Worst-case tco
+Slack          : N/A
+Required Time  : None
+Actual Time    : 13.580 ns
+From           : LATCH_DATA:inst21|DATA[0]_102
+To             : AD[1]
+From Clock     : NWE
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case tpd
+Slack          : N/A
+Required Time  : None
+Actual Time    : 9.444 ns
+From           : NADV
+To             : AD[1]
+From Clock     : --
+To Clock       : --
+Failed Paths   : 0
+
+Type           : Worst-case th
+Slack          : N/A
+Required Time  : None
+Actual Time    : 3.400 ns
+From           : NOE
+To             : LATCH_DATA:inst21|DATA[0]_102
+From Clock     : --
+To Clock       : NWE
+Failed Paths   : 0
+
+Type           : Clock Setup: 'pll1:inst8|altpll:altpll_component|_clk2'
+Slack          : 20.998 ns
+Required Time  : 40.00 MHz ( period = 25.000 ns )
+Actual Time    : Restricted to 163.03 MHz ( period = 6.134 ns )
+From           : RAM2PORT:inst9|altsyncram:altsyncram_component|altsyncram_8ao1:auto_generated|ram_block1a0~portb_address_reg7
+To             : RAM2PORT:inst9|altsyncram:altsyncram_component|altsyncram_8ao1:auto_generated|q_b[7]
+From Clock     : pll1:inst8|altpll:altpll_component|_clk2
+To Clock       : pll1:inst8|altpll:altpll_component|_clk2
+Failed Paths   : 0
+
+Type           : Clock Hold: 'pll1:inst8|altpll:altpll_component|_clk2'
+Slack          : 2.943 ns
+Required Time  : 40.00 MHz ( period = 25.000 ns )
+Actual Time    : N/A
+From           : RAM2PORT:inst9|altsyncram:altsyncram_component|altsyncram_8ao1:auto_generated|ram_block1a0~porta_datain_reg7
+To             : RAM2PORT:inst9|altsyncram:altsyncram_component|altsyncram_8ao1:auto_generated|ram_block1a7~porta_memory_reg0
+From Clock     : pll1:inst8|altpll:altpll_component|_clk2
+To Clock       : pll1:inst8|altpll:altpll_component|_clk2
+Failed Paths   : 0
+
+Type           : Total number of failed paths
+Slack          : 
+Required Time  : 
+Actual Time    : 
+From           : 
+To             : 
+From Clock     : 
+To Clock       : 
+Failed Paths   : 0
+
+--------------------------------------------------------------------------------------
+

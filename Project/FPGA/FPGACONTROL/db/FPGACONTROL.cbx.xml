@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="FPGACONTROL">
+		<CBX_INST_ENTRY INSTANCE_NAME="|FPGACONTROL|RAM2PORT:inst70|altsyncram:altsyncram_component" CBX_FILE_NAME="altsyncram_acr1.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

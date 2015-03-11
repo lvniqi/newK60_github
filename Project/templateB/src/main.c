@@ -83,6 +83,8 @@ float sum_h1;
 float sum_h2;
 float sum_v1;
 bool lock;
+bool left_lock;
+bool right_lock;
 
 /**
  *电机参数

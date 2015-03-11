@@ -682,7 +682,7 @@ void duoji_Control5(void)
     }
   }
   
-  if(he>70&&left_max_f==false&&right_max_f==false)
+  if(he>40&&left_max_f==false&&right_max_f==false)
   {
     ep = cha / powf(he, 1.5);
   }
@@ -718,6 +718,138 @@ void duoji_Control5(void)
   {
     ep0=duojic_r/duoji_Kp;
     duojiTemp = duoji_right;
+  }
+  
+  duojiTemp_old=duojiTemp;
+  duoji=duojiTemp;
+  
+  duoji_ChangeDuty(duoji);
+  
+  if(duojiTemp==duoji_left)
+  {
+    left_max_f=true;
+    right_max_f=false;
+    beep_time=10;
+  }
+  else if(duojiTemp==duoji_right)
+  {
+    right_max_f=true;
+    left_max_f=false;
+    beep_time=10;
+  }
+  
+  if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)
+  {
+    stop=true;
+    beep_time=10;
+  }
+}
+
+void duoji_Control6(void)
+{
+  /**
+   *舵机方向控制
+  */
+  /**
+   *your own control
+  */
+  if(beep_time>0)
+  {
+    beep_time--;
+    Beep(true);
+  }
+  else
+  {
+    beep_time=0;
+    Beep(false);
+  }
+  
+  e1M2 = ad2_avg - ad1_avg;
+  e1P2 = ad1_avg + ad2_avg;
+  
+  e3M4 = ad4_avg - ad3_avg;
+  e3P4 = ad3_avg + ad4_avg;
+  
+  arg1=0.3;
+  arg2=0.6;  
+  arg3=0.6;
+  arg4=0.3;
+
+  cha = arg1 * e1M2 + arg2 * e3M4;
+  he = arg3 * (e1P2 + ad7_avg) + arg4 * e3P4;
+  
+  duoji_Kp=ABS(30000-12*ad7_avg);
+  //duoji_Kp=30000;
+  duoji_Kd=60000;
+  
+  if(left_max_f)
+  {
+    if((ad1_avg>ad2_avg&&ad1_avg>80)||(ad3_avg>ad4_avg&&ad3_avg<50))
+    {
+      left_max_f=false;
+      //beep_time=10;
+    }
+  }
+  else if(right_max_f)
+  {
+    if((ad2_avg>ad1_avg&&ad2_avg>80)||(ad4_avg>ad3_avg&&ad4_avg<50))
+    {
+      right_max_f=false;
+      //beep_time=10;
+    }
+  }
+  
+  if(he>40&&left_max_f==false&&right_max_f==false)
+  {
+    ep = cha / powf(he, 1.5);
+  }
+  else
+  {
+    ep=ep9;
+  }
+
+
+  ep9=ep8;
+  ep8=ep7;
+  ep7=ep6;
+  ep6=ep5;
+  ep5=ep4;
+  ep4=ep3;
+  ep3=ep2;
+  ep2=ep1;
+  ep1=ep0;
+  ep0=ep;
+  ed=ep2-ep4;
+  
+  duojiTemp = (u32)(duoji_Kp * ep + duoji_Kd * ed + duoji_mid);
+  
+  /**
+   *舵机限幅
+  */
+  if((duojiTemp <= duoji_left)||left_max_f)
+  {
+    ep0=-duojic_l/duoji_Kp;
+    duojiTemp = duoji_left;
+  }
+  if((duojiTemp >= duoji_right)||right_max_f)
+  {
+    ep0=duojic_r/duoji_Kp;
+    duojiTemp = duoji_right;
+  }
+  
+  if((duojiTemp <= duoji_left+100)&&ad1_avg<=30&&left_max_f==false)
+  {
+    ep0=-duojic_l/duoji_Kp;
+    duojiTemp = duoji_left;
+    left_max_f=true;
+    beep_time=10;
+  }
+  if((duojiTemp >= duoji_right-100)&&ad2_avg<=30&&right_max_f==false)
+  {
+    ep0=duojic_r/duoji_Kp;
+    duojiTemp = duoji_right;
+    right_max_f=true;
+    beep_time=10;
   }
   
   duojiTemp_old=duojiTemp;

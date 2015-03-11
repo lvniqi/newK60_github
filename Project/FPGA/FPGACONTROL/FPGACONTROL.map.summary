@@ -1,0 +1,14 @@
+Analysis & Synthesis Status : Successful - Tue Aug 05 14:01:56 2014
+Quartus II Version : 10.0 Build 262 08/18/2010 SP 1 SJ Full Version
+Revision Name : FPGACONTROL
+Top-level Entity Name : FPGACONTROL
+Family : Cyclone II
+Total logic elements : 186
+    Total combinational functions : 136
+    Dedicated logic registers : 105
+Total registers : 105
+Total pins : 47
+Total virtual pins : 0
+Total memory bits : 8,192
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1
