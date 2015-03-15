@@ -71,6 +71,7 @@ extern void duoji_Control3(void); //舵机控制3
 extern void duoji_Control4(void); //舵机控制4
 extern void duoji_Control5(void); //舵机控制5
 extern void duoji_Control6(void); //舵机控制6
+extern void duoji_Control7(void); //舵机控制7
 
 extern float quan;
 
