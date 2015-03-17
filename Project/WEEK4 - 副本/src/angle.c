@@ -1,6 +1,6 @@
 #include "angle.h"
-float angle_kp = 4100; //舵机控制P值
-float angle_kd = 6100; //舵机控制d值
+float angle_kp = 5500; //舵机控制P值
+float angle_kd = 6000; //舵机控制d值
 u32 angle = ANGLE_MID;
 
 float _ANGLE_P_SEQ_DATABASE[ANGLE_P_SEQ_LEN];
@@ -64,8 +64,16 @@ void ANGLE_Control(void){
   vertical_1_cut = ADCDATA.vertical_1[1] - ADCDATA.vertical_1[0];
   vertical_1_sum = MyADC_V1_Sum(&ADCDATA);
   int temp_angle = Sequeue_Get_Rear(&ANGLE_SEQ);
+  float arg3,arg4;
+  if(vertical_1_cut > horizontal_1_cut){
+    arg3 = 0.8;
+    arg4 = 0.7;
+  }else{
+    arg3 = 1;
+    arg4 = 0.5;
+  }
   float cha = arg1 * horizontal_1_cut + arg2 * vertical_1_cut;
-  float he =  horizontal_1_sum + 0.5*vertical_1_sum;
+  float he =  arg3 * horizontal_1_sum + arg4 * vertical_1_sum;
   float ep;
   if (((
        horizontal_2_sum/3>horizontal_1_sum &&
@@ -73,7 +81,6 @@ void ANGLE_Control(void){
        //horizontal_2_sum > 1300
        )||(
        ANGLE_is_edge(temp_angle)&&
-       he <2200&&
        he >150
        ))&&ANGLE_SEQ.lock == ANGLE_NOLOCK
       ){
@@ -126,7 +133,7 @@ void ANGLE_Control(void){
   float ed = Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 2) - 
     Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 4);
   angle = ANGLE_MID + (angle_kp *ep + angle_kd * ed);
-  
+    ANGLE_Size_control(angle);
     Sequeue_In_Queue(&ANGLE_SEQ, angle);
     Sequeue_Out_Queue(&ANGLE_SEQ);
     
