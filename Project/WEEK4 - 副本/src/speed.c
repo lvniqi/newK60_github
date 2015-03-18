@@ -21,10 +21,10 @@ void SPEED_Control(u32 duty){
 
 void PIT1_Isr(void){
   SPEED_CURR = DMA_Count_Get(SPEED_COUNTER1_addr);
-  int j = abs(Sequeue_Get_Rear(&ANGLE_SEQ) - ANGLE_MID) / 80;
+  int j = abs(Sequeue_Get_Rear(&ANGLE_SEQ) - ANGLE_MID) / 30;
   if (STOP_FLAG < 100){
     //SPEED_Control(SPEED_SET(140-j));
-    SPEED_Control(SPEED_SET(140-j));
+    SPEED_Control(SPEED_SET(165-j));
   }
   else{
     SPEED_Stop();
