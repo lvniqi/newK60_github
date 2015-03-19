@@ -63,6 +63,8 @@ float e3M4=0;
 float e3P4=0;
 float e5M6=0;
 float e5P6=0;
+float fit_left=0;
+float fit_right=0;
 
 float cha = 0;
 float he;
@@ -142,7 +144,7 @@ int main(void)
   dianji_Init(); //电机初始化
   PIT0_Init(); //1ms定时器初始化
   OLED_Init(); //OLED初始化
-  beep_Init();//蜂鸣器初始化
+  beep_Init(); //蜂鸣器初始化
   
   EnableInterrupts();
   

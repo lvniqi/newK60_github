@@ -41,6 +41,8 @@ extern float e3M4;
 extern float e3P4;
 extern float e5M6;
 extern float e5P6;
+extern float fit_left;
+extern float fit_right;
 
 extern float cha;
 extern float he;
@@ -72,6 +74,7 @@ extern void duoji_Control4(void); //舵机控制4
 extern void duoji_Control5(void); //舵机控制5
 extern void duoji_Control6(void); //舵机控制6
 extern void duoji_Control7(void); //舵机控制7
+extern void duoji_Control8(void); //舵机控制8
 
 extern float quan;
 
