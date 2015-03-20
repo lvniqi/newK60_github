@@ -31,7 +31,7 @@ void NFR24l01_Init(){
 
 int main(void){
   DelayInit();
-  PT_INIT(&thread[0], 5); //5ms一次ad采集
+  PT_INIT(&thread[0], 4); //4ms一次ad采集
   PT_INIT(&thread[1], 20); //20ms一次蜂鸣器
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   PT_INIT(&thread[3], 1000); //1s一次停车指示

@@ -1,9 +1,9 @@
 
 #ifndef SPEED_CONTROL_H_
-  #define SPEED_CONTROL_H_
-  #include "common.h"
-  #include "sequeue.h"
-  #define SPEED_LEN 6
+#define SPEED_CONTROL_H_
+#include "common.h"
+#include "sequeue.h"
+#define SPEED_LEN 6
 
   extern float SPEED_P;
   extern float SPEED_I;

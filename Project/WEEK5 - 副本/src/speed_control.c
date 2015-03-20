@@ -4,7 +4,7 @@
 
 float SPEED_P = 100;
 float SPEED_I = 2;
-float SPEED_D = 0;
+float SPEED_D = 10;
 speed_sequeue SPEED_LIST;
 
 /*现有速度*/

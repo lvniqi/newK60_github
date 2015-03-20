@@ -1043,8 +1043,8 @@ void duoji_Control8(void)
   arg1=25;
   arg2=100-arg1;
 
-  fit_left=powf((powf(ad1_avg,2)+powf(ad3_avg,2)),0.5);
-  fit_right=powf((powf(ad2_avg,2)+powf(ad4_avg,2)),0.5);
+  fit_left=2*powf((powf(ad1_avg,2)+powf(ad3_avg,2))/2.0,0.5);
+  fit_right=2*powf((powf(ad2_avg,2)+powf(ad4_avg,2))/2.0,0.5);
  
   cha = arg1*e1M2 + arg2*e3M4;
   he = e1P2 + ad7_avg + e3P4;
@@ -1055,13 +1055,13 @@ void duoji_Control8(void)
   duoji_Kd=2*duoji_Kp;
   
   //左右方向锁定过于滞后
-  if(fit_left-5>ad7_avg&&fit_left-5>fit_right&&right==false)
+  if(fit_left-10>ad7_avg&&fit_left-10>fit_right&&right==false)
   {
     left=true;
     right=false;
     //beep_time=10;
   }
-  if(fit_right-5>ad7_avg&&fit_right-5>fit_left&&left==false)
+  if(fit_right-10>ad7_avg&&fit_right-10>fit_left&&left==false)
   {
     left=false;
     right=true;
@@ -1103,7 +1103,7 @@ void duoji_Control8(void)
     }
   }
   
-  if(he>130&&left_max_f==false&&right_max_f==false)
+  if(he>50&&left_max_f==false&&right_max_f==false)
   {
     ep = cha / powf(he, 1.5);
   }
@@ -1150,6 +1150,6 @@ void duoji_Control8(void)
   if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)
   {
     stop=true;
-    beep_time=10;
+    //beep_time=10;
   }
 }

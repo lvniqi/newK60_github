@@ -19,21 +19,17 @@ void BlueTooth_Init(void)
 
 void OutPut_Data(void)
 {
-  int           temp[2] = {0};
-  unsigned int  temp1[2] = {0};
-  unsigned char databuf[8] = {0};
-  unsigned char i;
-  for(i=0;i<=1;i++)
-  { 
-    temp[i] = (int)OutData[i];
-    temp1[i] = (unsigned int)temp[i]; 
-  } 
-  for(i=0;i<=1;i++) 
-  {
-    databuf[i*2] = (unsigned char)(temp1[i]);
-    databuf[i*2+1] = (unsigned char)(temp1[i]);
-  } 
-  databuf[8-1] = 0xff;
-  for(i=0;i<=8-1;i++)
+  u8 databuf[8] = {0};
+  
+  databuf[0] = ad1_avg;
+  databuf[1] = ad2_avg;
+  databuf[2] = ad3_avg;
+  databuf[3] = ad4_avg;
+  databuf[4] = ad5_avg;
+  databuf[5] = ad6_avg;
+  databuf[6] = ad7_avg;
+  databuf[7] = ad8_avg;
+
+  for(int i=0;i<8;i++)
     UART_WriteByte(instance,databuf[i]);
 }

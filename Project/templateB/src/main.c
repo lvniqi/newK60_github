@@ -145,6 +145,7 @@ int main(void)
   PIT0_Init(); //1ms定时器初始化
   OLED_Init(); //OLED初始化
   beep_Init(); //蜂鸣器初始化
+  BlueTooth_Init(); //蓝牙初始化
   
   EnableInterrupts();
   

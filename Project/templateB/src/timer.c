@@ -61,6 +61,7 @@ void PIT0_CallBack(void)
     ad7_avg=ad7/duoji_ControlTime;ad8_avg=ad8/duoji_ControlTime;
     
     duoji_Control8(); //舵机控制程序8
+    OutPut_Data(); //蓝牙发送数据
     
     ad1=0;ad2=0;ad3=0;ad4=0;ad5=0;ad6=0;ad7=0;ad8=0;
   }
