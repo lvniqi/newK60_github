@@ -1100,7 +1100,7 @@ void duoji_Control8(void)
   }
   else if(right_max_f)
   {
-    if(ad2_avg+ad4_avg>ad1_avg+ad3_avg&&ad8_avg>90||right==false)
+    if(ad2_avg+ad4_avg>ad1_avg+ad3_avg&&ad8_avg>60||right==false)
     {
       right_max_f=false;
       //beep_time=10;

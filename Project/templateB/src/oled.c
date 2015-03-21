@@ -1064,10 +1064,10 @@ void get(int x,int y,int z,int z1,int p)
 */
 void PrintParemeter(void)
 {
-  get(ad1_avg, ad7_avg, ad2_avg, 172, 1);
-  get(ad3_avg, ad4_avg, time, 34, 2);
-  get(ad5_avg, ad6_avg, 56, 56, 3);
-  get(ad8_avg, sp, (u32)fit_left, (u32)fit_right, 4);
+  get((u32)ad1_avg, (u32)ad7_avg, (u32)ad2_avg, 172, 1);
+  get((u32)ad3_avg, (u32)ad4_avg, time, 34, 2);
+  get((u32)ad5_avg, (u32)ad6_avg, 56, 56, 3);
+  get((u32)ad8_avg, (u32)sp, (u32)fit_left, (u32)fit_right, 4);
 }
 
 /*****************************************************************************
