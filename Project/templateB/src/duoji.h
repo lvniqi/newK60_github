@@ -11,8 +11,8 @@
  *duoji_right:舵机右最大值
  *duoji_left:舵机左最大值
 */
-#define duojic_r 1100
-#define duojic_l 1100
+#define duojic_r 1120
+#define duojic_l 1120
 //#define duoji_mid 4250 //新车的舵机中心值
 #define duoji_mid 4600
 #define duoji_right (duoji_mid+duojic_r)
@@ -49,9 +49,9 @@ extern float he;
 extern float cha1;
 extern float he1;
 
-extern u32 duoji;
-extern u32 duojiTemp;
-extern u32 duojiTemp_old;
+extern float duoji;
+extern float duojiTemp;
+extern float duojiTemp_old;
 
 extern float arg1;
 extern float arg2;

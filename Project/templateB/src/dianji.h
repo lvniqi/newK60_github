@@ -10,15 +10,15 @@ extern float dianji_Kp;
 extern float dianji_Ki;
 extern float dianji_Kd;
 
-extern u32 sp;
-extern u32 sp_expect;
+extern float sp;
+extern float sp_expect;
 
-extern int sp_e0;
-extern int sp_e0_last;
-extern int sp_e0_last_last;
+extern float sp_e0;
+extern float sp_e0_last;
+extern float sp_e0_last_last;
 
-extern int sp_e1;
-extern int sp_e2;
+extern float sp_e1;
+extern float sp_e2;
 
 extern bool dianji_protect;
 extern u32 dianji_max_cnt;

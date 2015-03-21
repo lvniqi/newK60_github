@@ -152,7 +152,7 @@ void duoji_Control1(void)
   
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   //duoji_ChangeDuty(duoji_mid);
   
   if(ad1_avg<6&&ad7_avg<6&&ad2_avg<6&&ad8_avg<6)
@@ -247,7 +247,7 @@ void duoji_Control2(void)
   
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   //duoji_ChangeDuty(duoji_mid);
   
   if(ad1_avg<6&&ad7_avg<6&&ad2_avg<6&&ad8_avg<6)
@@ -464,7 +464,7 @@ void duoji_Control3(void)
   }
   else
   {
-    duoji_ChangeDuty(duoji);
+    duoji_ChangeDuty((u32)duoji);
   }
   //duoji_ChangeDuty(duoji);
   
@@ -608,7 +608,7 @@ void duoji_Control4(void)
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   
   if(duojiTemp==duoji_left)
   {
@@ -724,7 +724,7 @@ void duoji_Control5(void)
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   
   if(duojiTemp==duoji_left)
   {
@@ -857,7 +857,7 @@ void duoji_Control6(void)
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   
   if(duojiTemp==duoji_left)
   {
@@ -993,7 +993,7 @@ void duoji_Control7(void)
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
   
   if(duojiTemp==duoji_left)
   {
@@ -1040,55 +1040,59 @@ void duoji_Control8(void)
   e3M4 = ad4_avg - ad3_avg;
   e3P4 = ad3_avg + ad4_avg;
   
-  arg1=25;
-  arg2=100-arg1;
+  arg1=0.3;
+  arg2=0.6;
+  arg3=0.6;
+  arg4=0.3;
+  
+  cha = arg1 * e1M2 + arg2 * e3M4;
+  he =  arg3 * (e1P2 + ad7_avg)  + arg4 * e3P4;
 
-  fit_left=2*powf((powf(ad1_avg,2)+powf(ad3_avg,2))/2.0,0.5);
-  fit_right=2*powf((powf(ad2_avg,2)+powf(ad4_avg,2))/2.0,0.5);
- 
-  cha = arg1*e1M2 + arg2*e3M4;
-  he = e1P2 + ad7_avg + e3P4;
+  fit_left=powf((powf(ad1_avg,2)+powf(ad3_avg,2))/2.0,0.5);
+  fit_right=powf((powf(ad2_avg,2)+powf(ad4_avg,2))/2.0,0.5);
   
   //duoji_Kp = 30000/arg1*powf(2.6,-(ad7_avg/180.0-1.93));
-  duoji_Kp=ABS(33500-20*ad7_avg)/arg1;
+  duoji_Kp=35000-20*ad8_avg;
+  //duoji_Kp=30000/(arg1/arg3);
   //duoji_Kp=30000/arg1;
   duoji_Kd=2*duoji_Kp;
   
   //左右方向锁定过于滞后
-  if(fit_left-10>ad7_avg&&fit_left-10>fit_right&&right==false)
+  if(fit_left>ad7_avg&&fit_left-15>fit_right&&right==false)
   {
     left=true;
     right=false;
     //beep_time=10;
   }
-  if(fit_right-10>ad7_avg&&fit_right-10>fit_left&&left==false)
+  else if(fit_right>ad7_avg&&fit_right-15>fit_left&&left==false)
   {
     left=false;
     right=true;
     //beep_time=10;
   }
+
   if(ad1_avg>100||ad7_avg>100||ad2_avg>100||ad3_avg>110||ad4_avg>110) 
   {
     left=false;
     right=false;
   }
-  
-  if(left==true&&ad1_avg<90&&ad7_avg<70&&ad3_avg<100)
+
+  if(left==true&&ad1_avg<90&&ad7_avg<80&&ad3_avg<100)
   {
     left_max_f=true;
     right_max_f=false;
-    //beep_time=10;
+    beep_time=10;
   }
-  if(right==true&&ad2_avg<90&&ad7_avg<70&&ad4_avg<100)
+  if(right==true&&ad2_avg<90&&ad7_avg<60&&ad4_avg<100)
   {
     left_max_f=false;
     right_max_f=true;
-    //beep_time=10;
+    beep_time=10;
   }
   
   if(left_max_f)
   {
-    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg||left==false)
+    if(ad1_avg+ad3_avg>ad2_avg+ad4_avg&&ad8_avg>60||left==false)
     {
       left_max_f=false;
       //beep_time=10;
@@ -1096,21 +1100,31 @@ void duoji_Control8(void)
   }
   else if(right_max_f)
   {
-    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg||right==false)
+    if(ad2_avg+ad4_avg>ad1_avg+ad3_avg&&ad8_avg>90||right==false)
     {
       right_max_f=false;
       //beep_time=10;
     }
   }
   
-  if(he>50&&left_max_f==false&&right_max_f==false)
+  if(he>20&&left_max_f==false&&right_max_f==false)
   {
     ep = cha / powf(he, 1.5);
   }
   else
   {
-    ep=ep9;
-    //beep_time=10;
+    if(right==true)
+    {
+      right_max_f=true;
+    }
+    if(left==true)
+    {
+      left_max_f=true;
+    }
+    else
+    {
+      ep=ep9;
+    }
   }
   
   ep9=ep8;
@@ -1134,17 +1148,20 @@ void duoji_Control8(void)
   {
     ep0=-duojic_l/duoji_Kp;
     duojiTemp = duoji_left;
+    beep_time=10;
   }
   if((duojiTemp >= duoji_right)||right_max_f)
   {
     ep0=duojic_r/duoji_Kp;
     duojiTemp = duoji_right;
+    beep_time=10;
   }
   
   duojiTemp_old=duojiTemp;
   duoji=duojiTemp;
   
-  duoji_ChangeDuty(duoji);
+  duoji_ChangeDuty((u32)duoji);
+  //duoji_ChangeDuty(duoji_left);
   
   
   if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)

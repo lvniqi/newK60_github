@@ -19,8 +19,8 @@ u8 duoji_time = 0;
 u8 dianji_time = 0;
 u32 startTime = 0;
 
-u16 ad1=0,ad2=0,ad3=0,ad4=0,ad5=0,ad6=0,ad7=0,ad8=0;
-u8 ad1_avg=0,ad2_avg=0,ad3_avg=0,ad4_avg=0,ad5_avg=0,ad6_avg=0,ad7_avg=0,ad8_avg=0;
+float ad1=0,ad2=0,ad3=0,ad4=0,ad5=0,ad6=0,ad7=0,ad8=0;
+float ad1_avg=0,ad2_avg=0,ad3_avg=0,ad4_avg=0,ad5_avg=0,ad6_avg=0,ad7_avg=0,ad8_avg=0;
 
 bool stop = false;
 
@@ -74,9 +74,9 @@ float he1;
 float far_x=0;
 float near_x=0;
 
-u32 duoji = duoji_mid;
-u32 duojiTemp=duoji_mid;
-u32 duojiTemp_old=duoji_mid;
+float duoji = duoji_mid;
+float duojiTemp=duoji_mid;
+float duojiTemp_old=duoji_mid;
 
 bool SZ_left=false;
 bool SZ_right=false;
@@ -98,15 +98,15 @@ float dianji_Kp=10;
 float dianji_Ki=0.07;
 float dianji_Kd=0;
 
-u32 sp;
-u32 sp_expect;
+float sp;
+float sp_expect;
 
-int sp_e0;
-int sp_e0_last;
-int sp_e0_last_last;
+float sp_e0;
+float sp_e0_last;
+float sp_e0_last_last;
 
-int sp_e1;
-int sp_e2;
+float sp_e1;
+float sp_e2;
 
 bool dianji_protect=false;
 u32 dianji_max_cnt=0;

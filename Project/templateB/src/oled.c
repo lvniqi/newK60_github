@@ -1067,7 +1067,7 @@ void PrintParemeter(void)
   get(ad1_avg, ad7_avg, ad2_avg, 172, 1);
   get(ad3_avg, ad4_avg, time, 34, 2);
   get(ad5_avg, ad6_avg, 56, 56, 3);
-  get(ad8_avg, duoji, sp, 4, 4);
+  get(ad8_avg, sp, (u32)fit_left, (u32)fit_right, 4);
 }
 
 /*****************************************************************************

@@ -23,7 +23,7 @@ extern u16 ADC0_Channelx_GETDATA(u8 x); //ADC0通道x读取AD值
 extern u16 ADC1_Channelx_GETDATA(u8 x); //ADC1通道x读取AD值
 extern u16 ADC_GETDATA(u8 x); //ADC通道读取AD值
 
-extern u16 ad1,ad2,ad3,ad4,ad5,ad6,ad7,ad8;
-extern u8 ad1_avg,ad2_avg,ad3_avg,ad4_avg,ad5_avg,ad6_avg,ad7_avg,ad8_avg;
+extern float ad1,ad2,ad3,ad4,ad5,ad6,ad7,ad8;
+extern float ad1_avg,ad2_avg,ad3_avg,ad4_avg,ad5_avg,ad6_avg,ad7_avg,ad8_avg;
 
 #endif
