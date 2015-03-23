@@ -22,8 +22,7 @@ PT_THREAD(GetAd(PT *pt)){
   MyADC_Get(&ADCDATA);
   if (MyADC_H1_Average(&ADCDATA) < 100 &&
       MyADC_H2_Average(&ADCDATA) < 100 &&
-      MyADC_V1_Average(&ADCDATA) < 100 &&
-      ADCDATA.protect < 300){
+        MyADC_V1_Average(&ADCDATA) < 100){
     if (STOP_FLAG <= 100){
       STOP_FLAG++;
     }

@@ -58,7 +58,8 @@ int main(void){
     //  MyADC_Show(&ADCDATA);
     //}
     //ANGLE_ChangeDuty(temp_rx);
-    //GetAd(&thread[0]); //ad采集
+    GetAd(&thread[0]); //ad采集  
+    OLED_PrintShort(60,7,ADCDATA.IR);
     //BEEP(&thread[1]); //蜂鸣器
     //SHOW(&thread[2]);//显示数据
     //如果运行结束
