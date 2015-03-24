@@ -89,6 +89,5 @@ void PIT0_CallBack(void)
   {
     time = dingshi;
   }
-  
   EnableInterrupts();
 }

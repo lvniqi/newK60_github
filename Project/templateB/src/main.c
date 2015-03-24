@@ -88,6 +88,19 @@ bool lock;
 bool left_lock;
 bool right_lock;
 
+float e0;
+float e1;
+float e2;
+float e3;
+float e4;
+float e5;
+
+float quan;
+float hc;
+float hc1;
+float hc_total;
+float prehc_total;
+
 /**
  *电机参数
 */

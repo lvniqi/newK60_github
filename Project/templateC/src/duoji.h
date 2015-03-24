@@ -11,12 +11,11 @@
  *duoji_right:舵机右最大值
  *duoji_left:舵机左最大值
 */
-#define duojic_r 1120
-#define duojic_l 1120
-#define duoji_mid 4600 //新车的舵机中心值
-//#define duoji_mid 4600
-#define duoji_right (duoji_mid+duojic_r)
-#define duoji_left  (duoji_mid-duojic_l)
+#define duojic_r 100
+#define duojic_l 100
+#define duoji_mid 680
+#define duoji_right (duoji_mid-duojic_r)
+#define duoji_left  (duoji_mid+duojic_l)
 
 extern float duoji_Kp; //舵机控制P值
 extern float duoji_Kd; //舵机控制d值
@@ -68,12 +67,6 @@ extern bool left_max_f;
 
 extern void duoji_Init(void); //舵机初始化
 extern void duoji_Control1(void); //舵机控制1
-extern void duoji_Control2(void); //舵机控制2
-extern void duoji_Control3(void); //舵机控制3
-extern void duoji_Control4(void); //舵机控制4
-extern void duoji_Control5(void); //舵机控制5
-extern void duoji_Control6(void); //舵机控制6
-extern void duoji_Control7(void); //舵机控制7
 extern void duoji_Control8(void); //舵机控制8
 
 extern float quan;

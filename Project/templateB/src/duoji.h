@@ -75,6 +75,7 @@ extern void duoji_Control5(void); //舵机控制5
 extern void duoji_Control6(void); //舵机控制6
 extern void duoji_Control7(void); //舵机控制7
 extern void duoji_Control8(void); //舵机控制8
+extern void duoji_Control9(void); //舵机控制9
 
 extern float quan;
 
@@ -90,5 +91,18 @@ extern float sum_v1;
 extern bool lock;
 extern bool left_lock;
 extern bool right_lock;
+
+extern float e0;
+extern float e1;
+extern float e2;
+extern float e3;
+extern float e4;
+extern float e5;
+
+extern float quan;
+extern float hc;
+extern float hc1;
+extern float hc_total;
+extern float prehc_total;
 
 #endif //__DUOJI_H
