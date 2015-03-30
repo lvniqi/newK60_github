@@ -1052,8 +1052,8 @@ void duoji_Control8(void)
   fit_right=powf((powf(ad2_avg,2)+powf(ad4_avg,2))/2.0,0.5);
   
   //duoji_Kp = 30000/arg1*powf(2.6,-(ad7_avg/180.0-1.93));
-  //duoji_Kp=35000-20*ad8_avg;
-  duoji_Kp=30000;
+  //duoji_Kp=29000-20*ad8_avg;
+  duoji_Kp=32000;
   //duoji_Kp=30000/(arg1/arg3);
   //duoji_Kp=30000/arg1;
   duoji_Kd=2*duoji_Kp;
@@ -1078,13 +1078,13 @@ void duoji_Control8(void)
     right=false;
   }
 
-  if(left==true&&ad1_avg<50&&ad7_avg<70&&ad3_avg<80)
+  if(left==true&&ad1_avg<70&&ad7_avg<80&&ad3_avg<100)
   {
     left_max_f=true;
     right_max_f=false;
     //beep_time=10;
   }
-  if(right==true&&ad2_avg<50&&ad7_avg<70&&ad4_avg<80)
+  if(right==true&&ad2_avg<70&&ad7_avg<80&&ad4_avg<100)
   {
     left_max_f=false;
     right_max_f=true;
@@ -1093,7 +1093,7 @@ void duoji_Control8(void)
   
   if(left_max_f)
   {
-    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg&&ad8_avg>90||left==false)
+    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg&&ad8_avg>60||left==false)
     {
       left_max_f=false;
       //beep_time=10;
@@ -1101,7 +1101,7 @@ void duoji_Control8(void)
   }
   else if(right_max_f)
   {
-    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg&&ad8_avg>90||right==false)
+    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg&&ad8_avg>60||right==false)
     {
       right_max_f=false;
       //beep_time=10;
