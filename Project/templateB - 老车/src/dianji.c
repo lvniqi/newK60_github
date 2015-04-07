@@ -85,21 +85,21 @@ void dianji_PID(void)
   sp_e0_last_last=sp_e0_last;
   sp_e0_last=sp_e0;
   
-  //sp_expect=(u32)(130-ABS((duoji-duoji_mid)/30.0));
-  //sp_expect=(u32)(210-ABS((duoji-duoji_mid)/18.0));
-  sp_expect=160;
+  //sp_expect=(u32)(190-ABS((duoji-duoji_mid)/30.0));
+  //sp_expect=(u32)(190*((ad7_avg+ad8_avg)/2.0)/pow((pow(ad7_avg,2)+pow(ad8_avg,2))/2.0,0.5));
+  sp_expect=165;
   
   sp_e0=sp_expect-sp;
   sp_e1=sp_e0-sp_e0_last;
   sp_e2=sp_e0+sp_e0_last_last-2*sp_e0_last;
   
-  dianji_Kp=28;//20-30
-  dianji_Ki=0.09;//0.01-0.15
+  dianji_Kp=40;
+  dianji_Ki=0.2;
   dianji_Kd=0;
   
   dianji=(u32)(dianji_Ki*sp_e0+dianji_Kp*sp_e1+dianji_Kd*sp_e2 + dianji_last);
   
-  
+  /*
   if(sp>=200)
     dianji_max_cnt++;
   if(sp<=1)
@@ -118,6 +118,6 @@ void dianji_PID(void)
     dianji_protect=true;
     //beep_time=10;
   }
-  
+  */
   
 }

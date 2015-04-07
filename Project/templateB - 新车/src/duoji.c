@@ -1053,6 +1053,7 @@ void duoji_Control8(void)
   
   //duoji_Kp = 30000/arg1*powf(2.6,-(ad7_avg/180.0-1.93));
   //duoji_Kp=29000-20*ad8_avg;
+  //duoji_Kp=20000*pow((pow(ad3_avg,2)+pow(ad4_avg,2))/2.0,0.5)/((ad3_avg+ad4_avg)/2.0);
   duoji_Kp=32000;
   //duoji_Kp=30000/(arg1/arg3);
   //duoji_Kp=30000/arg1;

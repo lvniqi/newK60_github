@@ -13,8 +13,8 @@
 */
 #define duojic_r 1120
 #define duojic_l 1120
-//#define duoji_mid 4650 //新车的舵机中心值
-#define duoji_mid 4600
+#define duoji_mid 4550 //新车的舵机中心值
+//#define duoji_mid 4600
 #define duoji_right (duoji_mid+duojic_r)
 #define duoji_left  (duoji_mid-duojic_l)
 

@@ -93,8 +93,8 @@ void dianji_PID(void)
   sp_e1=sp_e0-sp_e0_last;
   sp_e2=sp_e0+sp_e0_last_last-2*sp_e0_last;
   
-  dianji_Kp=28;
-  dianji_Ki=0.09;
+  dianji_Kp=40;
+  dianji_Ki=0.2;
   dianji_Kd=0;
   
   dianji=(u32)(dianji_Ki*sp_e0+dianji_Kp*sp_e1+dianji_Kd*sp_e2 + dianji_last);

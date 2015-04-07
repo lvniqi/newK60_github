@@ -1052,8 +1052,9 @@ void duoji_Control8(void)
   fit_right=powf((powf(ad2_avg,2)+powf(ad4_avg,2))/2.0,0.5);
   
   //duoji_Kp = 30000/arg1*powf(2.6,-(ad7_avg/180.0-1.93));
-  //duoji_Kp=31000-20*ad8_avg;
-  duoji_Kp=28000;
+  //duoji_Kp=29000-20*ad8_avg;
+  //duoji_Kp=20000*pow((pow(ad3_avg,2)+pow(ad4_avg,2))/2.0,0.5)/((ad3_avg+ad4_avg)/2.0);
+  duoji_Kp=30000;
   //duoji_Kp=30000/(arg1/arg3);
   //duoji_Kp=30000/arg1;
   duoji_Kd=2*duoji_Kp;
@@ -1077,23 +1078,23 @@ void duoji_Control8(void)
     left=false;
     right=false;
   }
-//入弯 越大越早
-  if(left==true&&ad1_avg<50&&ad7_avg<40&&ad3_avg<60)
+
+  if(left==true&&ad1_avg<70&&ad7_avg<80&&ad3_avg<100)
   {
     left_max_f=true;
     right_max_f=false;
     //beep_time=10;
   }
-  if(right==true&&ad2_avg<50&&ad7_avg<40&&ad4_avg<60)
+  if(right==true&&ad2_avg<70&&ad7_avg<80&&ad4_avg<100)
   {
     left_max_f=false;
     right_max_f=true;
     //beep_time=10;
   }
- //出弯除去最大值标志  变大晚出
+  
   if(left_max_f)
   {
-    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg&&ad8_avg>95||left==false)
+    if(ad1_avg>ad2_avg&&ad3_avg>ad4_avg&&ad8_avg>60||left==false)
     {
       left_max_f=false;
       //beep_time=10;
@@ -1101,15 +1102,12 @@ void duoji_Control8(void)
   }
   else if(right_max_f)
   {
-    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg&&ad8_avg>95||right==false)
+    if(ad2_avg>ad1_avg&&ad4_avg>ad3_avg&&ad8_avg>60||right==false)
     {
       right_max_f=false;
       //beep_time=10;
     }
   }
-  
-  
-  
   if(left_max_f==false&&right_max_f==false)
   {
     if(he>10)
@@ -1194,7 +1192,6 @@ void duoji_Control8(void)
   duoji=duojiTemp;
   
   duoji_ChangeDuty((u32)duoji);
-  //duoji_ChangeDuty(duoji_mid);
   
   
   if(ad1_avg<3&&ad7_avg<3&&ad2_avg<3&&ad8_avg<3&&ad3_avg<3&&ad4_avg<3&&ad5_avg<3&&ad6_avg<3)
