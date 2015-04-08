@@ -1991,6 +1991,9 @@
       <name>$PROJ_DIR$\..\src\main.c</name>
     </file>
     <file>
+      <name>$PROJ_DIR$\..\src\my2401.c</name>
+    </file>
+    <file>
       <name>$PROJ_DIR$\..\src\my2401.h</name>
     </file>
     <file>
@@ -1998,6 +2001,12 @@
     </file>
     <file>
       <name>$PROJ_DIR$\..\src\myadc.h</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\myUart.c</name>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\..\src\myUart.h</name>
     </file>
     <file>
       <name>$PROJ_DIR$\..\src\oled.c</name>
