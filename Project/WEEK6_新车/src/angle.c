@@ -74,15 +74,14 @@ void ANGLE_Control(void){
   int temp_arg2 = 0.25-temp_arg1;
   if(temp_dif){
     cha = (0.75+temp_arg1)*arg1 * h_1_cut+(0.75+temp_arg2)*arg2 * v_1_cut;
-    if(temp_dif>0){
+    if(temp_dif>10){
       arg4 *= 0.5;
     }
-    else if(temp_dif <0){
+    else if(temp_dif <-10){
       arg3 *= 0.5;
     }
   }
-  else
-  {
+  else{
     cha = arg1 * h_1_cut + arg2 * v_1_cut;
   }
   float he =  arg3 * h_1_sum + arg4 * v_1_sum;
@@ -93,13 +92,24 @@ void ANGLE_Control(void){
            ANGLE_same_type(cha,h_2_cut)&&
            (abs(h_2_cut/h_2_sum)<0.3||(he>187))
          )||
-     (he>260))&&
-           ANGLE_SEQ.lock != ANGLE_NOLOCK
+     ((he>250)&&cha<-10))&&
+           ANGLE_SEQ.lock == ANGLE_LEFT_LOCK
           ){
     ANGLE_SEQ.lock = ANGLE_NOLOCK;
     //Beep_Enable();
   }
-
+  else if(
+     ((he>100&&
+           h_2_sum>50&&
+           ANGLE_same_type(cha,h_2_cut)&&
+           (abs(h_2_cut/h_2_sum)<0.3||(he>187))
+         )||
+     ((he>250)&&cha>10))&&
+           ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK
+          ){
+    ANGLE_SEQ.lock = ANGLE_NOLOCK;
+    //Beep_Enable();
+  }
   if (he > 4&&(ANGLE_SEQ.lock == ANGLE_NOLOCK)){
     ep = cha / powf(he, 1.6);
   }

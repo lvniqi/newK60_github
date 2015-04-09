@@ -3,8 +3,8 @@
 
 
 float SPEED_P = 80;
-float SPEED_I = 1.5;
-float SPEED_D = 10;
+float SPEED_I = 1.8;
+float SPEED_D = 2;
 speed_sequeue SPEED_LIST;
 
 /*现有速度*/
