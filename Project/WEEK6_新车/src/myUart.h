@@ -4,6 +4,7 @@
   #include "common.h"
   #include "uart.h"
   #include "Sequeue.h"
+  #include "stdbool.h"
   #define TXD_LENTH 300
   typedef struct _txd_sequeue
   {
@@ -13,7 +14,7 @@
 	u16 len;
 	u16 len_should_cut;
 	u16 len_max;
-        u8  full;
+        bool  sending;
   }txd_sequeue;
   extern u8 _TXD_DATASPACE[TXD_LENTH];
   extern char MyPrint(u8* p, int len);

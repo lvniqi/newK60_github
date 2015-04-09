@@ -1,76 +1,61 @@
 #include "myUart.h"
 txd_sequeue TXD_SEQUEUE;
 u8 _TXD_DATASPACE[TXD_LENTH];
-static void UART_TX_ISR(uint16_t * byteToSend)
-{
-    Sequeue_Out_Queue(&TXD_SEQUEUE);
-    *byteToSend = Sequeue_Get_Front(&TXD_SEQUEUE);
-    if(!(TXD_SEQUEUE.len))
-    {
-        UART_ITDMAConfig(HW_UART0, kUART_IT_Tx, false);  
-    }
+static void UART_TX_ISR(uint16_t * byteToSend){
+  *byteToSend = Sequeue_Get_Front(&TXD_SEQUEUE);
+  Sequeue_Out_Queue(&TXD_SEQUEUE);
+  if(!(TXD_SEQUEUE.len)){
+    UART_ITDMAConfig(HW_UART3, kUART_IT_Tx, false); 
+    TXD_SEQUEUE.sending = false;
+  }
 }
 void myUart_Init(){
-  UART_QuickInit(UART0_RX_PD06_TX_PD07, 115200);
+  UART_QuickInit(UART3_RX_PC16_TX_PC17, 115200);
   Sequeue_Init(&TXD_SEQUEUE,_TXD_DATASPACE,TXD_LENTH);
   /** print message before mode change*/
   printf("uart will be send on interrupt mode...\r\n");
   /** register callback function*/
-  UART_CallbackTxInstall(HW_UART0, UART_TX_ISR);
+  UART_CallbackTxInstall(HW_UART3, UART_TX_ISR);
   /** open TX interrupt */
-  UART_ITDMAConfig(HW_UART0, kUART_IT_Tx, true);
+  TXD_SEQUEUE.sending = true;
+  UART_ITDMAConfig(HW_UART3, kUART_IT_Tx, true);
 }
-char MyPutchar(u8 p)
-{
-   if(TXD_SEQUEUE.len_max < TXD_SEQUEUE.len+1)
-   {
+char MyPutchar(u8 p){
+   __disable_irq();
+   u16 len_max = TXD_SEQUEUE.len_max;
+   u16 len = TXD_SEQUEUE.len;
+   __enable_irq();
+   if(len_max < len+1){
      return 0;
    }
-   else
-   {
-      /*if(TXD_SEQUEUE.full)
-      {
-        TXED_FLAG = 0;
-        UART_D_REG(UARTN[UART1]) = p;
-        uart_tx_irq_en(UART1);
-      }
-      else
-      {*/
+   else{
+        /** open TX interrupt */
         __disable_irq();
         Sequeue_In_Queue(&TXD_SEQUEUE,p);
         __enable_irq();
-      //}
-      return 1;
+        if(TXD_SEQUEUE.sending == false){
+          UART_ITDMAConfig(HW_UART3, kUART_IT_Tx, true);
+        }
+    return 1;
    }
 }
-char MyPrint(u8* p, int len)
-{
+char MyPrint(u8* p, int len){
    int i;
-   if(TXD_SEQUEUE.len_max- TXD_SEQUEUE.len< len+3)
-   {
+   __disable_irq();
+   u16 len_max = TXD_SEQUEUE.len_max;
+   u16 t_len = TXD_SEQUEUE.len;
+   __enable_irq();
+   if(len_max - t_len< len+10){
      return 0;
    }
-   else
-   {
-     __disable_irq();
-     for(i=0;i<len;i++)
-     {
-        if(p[i] == 0xff)
-        {
+   else{
+     for(i=0;i<len;i++){
+        if(p[i] == 0xff){
           p[i] = 0xfe;
         }
-        /*if(TXED_FLAG)
-        {
-          TXED_FLAG = 0;
-          UART_D_REG(UARTN[UART1]) = p[i];
-        }
-        else*/
-        {
-          Sequeue_In_Queue(&TXD_SEQUEUE,p[i]);
-        }
+        MyPutchar(p[i]);
      }
-     Sequeue_In_Queue(&TXD_SEQUEUE,0xff);
-     __enable_irq();
+     MyPutchar(0xff);
      return 1;
    }
 }

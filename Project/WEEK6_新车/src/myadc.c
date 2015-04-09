@@ -113,3 +113,14 @@ void MyADC_Show(adc *adcdata){
   OLED_PrintShort_3(60, 2, (adcdata->h_2)[1]);
   OLED_PrintShort_3(90, 2, (adcdata->h_2)[2]);
 }
+void MyADC_Uart_Show(adc *adcdata){
+  u8 data[9] = {0,};
+  int i;
+  for(i=0;i<3;i++){
+    data[i] = (adcdata->h_1)[i];
+  }
+  for(i=0;i<2;i++){
+    data[3+i] = (adcdata->v_1)[i];
+  }
+  MyPrint(data,7);
+}

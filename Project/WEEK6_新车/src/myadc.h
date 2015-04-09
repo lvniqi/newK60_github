@@ -3,6 +3,7 @@
   #include "common.h"
   #include "adc.h"
   #include "threads.h"
+  #include "myUart.h"
   #define AD_H1_LEN 3
   #define AD_H2_LEN 3
   #define AD_V1_LEN 2

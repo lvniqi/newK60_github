@@ -20,6 +20,7 @@ PT_THREAD(GetAd(PT *pt)){
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
+  MyADC_Uart_Show(&ADCDATA);
   ANGLE_Control();
   if (MyADC_H1_Average(&ADCDATA)+ 
       MyADC_H2_Average(&ADCDATA)+
