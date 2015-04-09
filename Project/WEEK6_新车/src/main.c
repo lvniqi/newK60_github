@@ -20,6 +20,7 @@ int main(void){
   PT_INIT(&thread[1], 20); //20ms一次蜂鸣器
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   PT_INIT(&thread[3], 1000); //1s一次停车指示
+  PT_INIT(&thread[4], 2000); //串口控制
   BaseTimer_Init(); //1ms基本时钟
   OLED_Init(); //OLED初始化
   NFR24l01_RX_Init();
@@ -33,6 +34,7 @@ int main(void){
     BEEP(&thread[1]); //蜂鸣器
     SHOW(&thread[2]);//显示数据
     STOP(&thread[3]);//停车
+    UART_CONTROL(&thread[4]);//串口控制
     //如果运行结束
     //if (GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();
