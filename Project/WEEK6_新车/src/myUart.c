@@ -16,8 +16,10 @@ static void UART_RX_ISR(uint16_t byteReceived)
     /* 将接收到的数据发送回去 */
     static int i;
     if(byteReceived == '\n'){
-      if(i != 0){
+      if(i > 1){
+          (RXD_DATA.dataspace)[i] = 0;
           RXD_DATA.isgeted = true;
+          i = 0;
       }
       else{
         i = 0;

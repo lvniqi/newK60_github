@@ -122,5 +122,6 @@ void MyADC_Uart_Show(adc *adcdata){
   for(i=0;i<2;i++){
     data[3+i] = (adcdata->v_1)[i];
   }
+  data[5] = SPEED_CURR;
   MyPrint(data,7);
 }

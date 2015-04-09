@@ -103,5 +103,20 @@ PT_THREAD(STOP(PT *pt)){
    ***********************************************************************/
 PT_THREAD(UART_CONTROL(PT *pt)){
   PT_BEGIN(pt);
+  PT_WAIT_UNTIL(pt,RXD_DATA.isgeted);
+  __disable_irq();
+  RXD_DATA.isgeted = false;
+  //开始运行
+  if(strcmp(RXD_DATA.dataspace,"START") == 0){
+    STOP_FLAG = 0;
+  }
+  //停止运行
+  else if(strcmp(RXD_DATA.dataspace,"STOP") == 0){
+    STOP_FLAG = 100;
+  }
+  else{
+    ;
+  }
+  __enable_irq();
   PT_END(pt);
 }
