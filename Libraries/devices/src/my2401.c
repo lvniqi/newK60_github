@@ -48,7 +48,12 @@ void NFR24l01_TX_Init(){
     OLED_P6x8Str(0, 0, "2401 ERROR");
   } 
   nrf24l01_set_tx_mode();
+  /* ³õÊ¼»¯GPIOD8Òý½Å */
+  GPIO_QuickInit(HW_GPIOD, 8, kGPIO_Mode_IFT);
   while(nrf24l01_write_packet("\0",1)){
     OLED_P6x8Str(0, 0, "2401 NO CLIENT!");
+    if(GPIO_ReadBit(HW_GPIOD, 8)){
+      break;
+    }
   }
 }

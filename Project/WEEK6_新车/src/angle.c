@@ -149,3 +149,129 @@ void ANGLE_Control(void){
   }
     ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
 }
+
+void duoji_Control(void)
+{
+  /**
+   *舵机方向控制
+  */
+  
+  //第一排 左侧减右侧
+  float h_1_cut = ADCDATA.h_1[2] - ADCDATA.h_1[0];
+  //第一排 总和
+  float h_1_sum = MyADC_H1_Sum(&ADCDATA);
+  //第二排 总和
+  float h_2_sum = MyADC_H2_Sum(&ADCDATA);
+  //垂直 差 和
+  float v_1_cut,v_1_sum;
+  v_1_cut = ADCDATA.v_1[1] - ADCDATA.v_1[0];
+  v_1_sum = MyADC_V1_Sum(&ADCDATA);
+  
+  float cha = 0.3 * h_1_cut + 0.6 * v_1_cut;
+  float he =  0.6 * h_1_sum  + 0.3 * v_1_sum;
+
+  float fit_left=powf((powf(ADCDATA.h_1[0],2)+
+                       powf(ADCDATA.v_1[0],2))/2.0,0.5);
+  float fit_right=powf((powf(ADCDATA.h_1[2],2)+
+                        powf(ADCDATA.v_1[1],2))/2.0,0.5);
+  
+  angle_kp=20000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)/((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
+  //angle_kp=32000;
+  angle_kd=2*angle_kp;
+  
+  float ep;
+  float ed;
+  
+  //左右方向锁定过于滞后
+  if(fit_left>ADCDATA.h_1[1]&&
+    fit_left-15>fit_right&&
+    (ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
+  {
+    ANGLE_SEQ.lock = ANGLE_LEFT_LOCK;
+  }
+  else if(fit_right>ADCDATA.h_1[1]&&fit_right-15>fit_left&&(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
+  { 
+    ANGLE_SEQ.lock = ANGLE_RIGHT_LOCK;
+  }
+ 
+  if(ADCDATA.h_1[0]>100||ADCDATA.h_1[1]>100||ADCDATA.h_1[2]>100||ADCDATA.v_1[0]>110||ADCDATA.v_1[1]>110) 
+  {
+    ANGLE_SEQ.lock = ANGLE_NOLOCK; 
+  }
+
+  if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&ADCDATA.h_1[0]<70&&ADCDATA.h_1[1]<80&&ADCDATA.v_1[0]<100)
+  {
+    ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
+  }
+  if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&ADCDATA.h_1[2]<70&&ADCDATA.h_1[1]<80&&ADCDATA.v_1[1]<100)
+  {
+    ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;  
+  }
+  
+  if(ANGLE_SEQ.lockmax == ANGLE_LEFT_MAX_LOCK)
+  {
+    if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&ADCDATA.v_1[0]>ADCDATA.v_1[1]&&ADCDATA.h_2[1]>60||(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
+    {
+      ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;
+    }
+  }
+  else if(ANGLE_SEQ.lockmax == ANGLE_RIGHT_MAX_LOCK)
+  {
+    if(ADCDATA.h_1[2]>ADCDATA.h_1[0]&&ADCDATA.v_1[1]>ADCDATA.v_1[0]&&ADCDATA.h_2[1]>60||(ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
+    {
+      ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;  
+    }
+  }
+  if(ANGLE_SEQ.lockmax==ANGLE_MAX_NOLOCK)
+  {
+    if(he>10)
+    {
+      ep = cha / powf(he, 1.5);
+	  
+      Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
+      Sequeue_Out_Queue(&ANGLE_P_SEQ);
+    }
+    else
+    {
+      if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK)
+      {
+        ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;
+        ep=ANGLE_LIMIT/angle_kp;
+      }
+      if(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK)
+      {
+        ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
+        ep=-ANGLE_LIMIT/angle_kp;
+      }
+			
+      Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
+      Sequeue_Out_Queue(&ANGLE_P_SEQ);
+    }
+  }
+  else
+  {
+    if(ANGLE_SEQ.lockmax == ANGLE_RIGHT_MAX_LOCK)
+    {
+      ep=ANGLE_LIMIT/angle_kp;
+    }
+    else if(ANGLE_SEQ.lockmax == ANGLE_LEFT_MAX_LOCK)
+    {
+      ep=-ANGLE_LIMIT/angle_kp;
+    }
+		
+    Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
+    Sequeue_Out_Queue(&ANGLE_P_SEQ);
+  }
+  
+  ed=Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 1) - 
+  Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 3);
+
+  angle = (u32)(ANGLE_MID + (angle_kp *ep + angle_kd * ed));
+
+  ANGLE_Size_control(angle);
+
+  Sequeue_In_Queue(&ANGLE_SEQ, angle);
+  Sequeue_Out_Queue(&ANGLE_SEQ);
+  
+  ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
+}

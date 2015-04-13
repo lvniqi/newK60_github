@@ -21,7 +21,8 @@ PT_THREAD(GetAd(PT *pt)){
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
   MyADC_Uart_Show(&ADCDATA);
-  ANGLE_Control();
+  //ANGLE_Control();
+  duoji_Control();
   if (MyADC_H1_Average(&ADCDATA)+ 
       MyADC_H2_Average(&ADCDATA)+
       MyADC_V1_Average(&ADCDATA) < 14){

@@ -18,6 +18,9 @@
   #define ANGLE_MID 4550
   #define ANGLE_LEFT_LOCK 1
   #define ANGLE_RIGHT_LOCK 2
+  #define ANGLE_LEFT_MAX_LOCK 1
+  #define ANGLE_RIGHT_MAX_LOCK 2
+  #define ANGLE_MAX_NOLOCK 0
   #define ANGLE_NOLOCK 0
   #define ANGLE_LIMIT_LEFT (ANGLE_MID-ANGLE_LIMIT)
   #define ANGLE_LIMIT_RIGHT  (ANGLE_MID+ANGLE_LIMIT)
@@ -45,5 +48,6 @@
 
   extern void ANGLE_Init(void); //舵机初始化
   extern void ANGLE_Control(void); //舵机控制
+void duoji_Control(void);
 
 #endif //__ANGLE_H
