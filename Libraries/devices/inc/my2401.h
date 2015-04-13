@@ -7,8 +7,11 @@
   #include "oled.h"
   typedef struct _my2401_data
   {
+    u8 status_flag;
     int angle;
-    u32 speed;
+    int speed;
   }my2401_data;
+  extern my2401_data RF2401_RXD;
   extern void NFR24l01_RX_Init();
+  extern void NFR24l01_TX_Init();
 #endif //__RF2401_H

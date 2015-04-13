@@ -9,25 +9,7 @@
 #include "Threads.h"
 #include "speed_counter.h"
 #include "spi.h"
-#include "nrf24l01.h"
-
-void NFR24l01_Init(){
-  /* 初始化2401模块*/
-  static struct spi_bus bus;
-  GPIO_QuickInit(HW_GPIOA, 17, kGPIO_Mode_IPD);
-  /* 初始化 NRF2401模块 的SPI接口及片选 */
-  PORT_PinMuxConfig(HW_GPIOA, 14, kPinAlt2);
-  PORT_PinMuxConfig(HW_GPIOA, 15, kPinAlt2);
-  PORT_PinMuxConfig(HW_GPIOA, 16, kPinAlt2);
-  PORT_PinMuxConfig(HW_GPIOA, 17, kPinAlt2);
-  /* 初始化2401所需的CE引脚 */
-  GPIO_QuickInit(HW_GPIOA, 10, kGPIO_Mode_OPP);
-  kinetis_spi_bus_init(&bus, HW_SPI0);
-  nrf24l01_init(&bus, 0);
-  while (nrf24l01_probe()){
-    OLED_P6x8Str(0, 0, "2401 ERROR");
-  } nrf24l01_set_rx_mode();
-}
+#include "my2401.h"
 
 int main(void){
   DelayInit();
@@ -35,19 +17,20 @@ int main(void){
   PT_INIT(&thread[1], 20); //20ms一次蜂鸣器
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   PT_INIT(&thread[3], 1000); //1s一次停车指示
-  BaseTimer_Init(); //1ms基本时钟
   OLED_Init(); //OLED初始化
-  NFR24l01_Init();
+  NFR24l01_RX_Init();
+  OLED_Init(); //OLED初始化
+  BaseTimer_Init(); //1ms基本时钟
   ANGLE_Init(); //舵机初始化
   SPEED_Init(); //电机初始化
   MyADC_Init(); //ADC初始化
   beep_Init(); //蜂鸣器初始化
-  nrf24l01_set_tx_mode();
   while (1){
-    GetAd(&thread[0]); //ad采集
-    BEEP(&thread[1]); //蜂鸣器
-    SHOW(&thread[2]);//显示数据
-    STOP(&thread[3]);//停车
+    FTM_PWM_ChangeDuty(HW_FTM1, HW_FTM_CH1, RF2401_RXD.angle+ANGLE_MID);
+    //GetAd(&thread[0]); //ad采集
+    //BEEP(&thread[1]); //蜂鸣器
+    //SHOW(&thread[2]);//显示数据
+    //STOP(&thread[3]);//停车
     //如果运行结束
     //if (GetAd(&thread[0]) == PT_ENDED){ 
       //nrf24l01_set_tx_mode();

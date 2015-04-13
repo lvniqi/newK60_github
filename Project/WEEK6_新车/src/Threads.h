@@ -14,7 +14,7 @@
   #include "gpio.h"
   #include "angle.h"
   #include "speed.h"
-  #include "nrf24l01.h"
+  #include "my2401.h"
   extern u8 BEEP_FLAG;
   extern u8 STOP_FLAG;
   extern PT thread[THREAD_NUM];

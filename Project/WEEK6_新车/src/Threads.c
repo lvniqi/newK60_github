@@ -29,7 +29,10 @@ PT_THREAD(GetAd(PT *pt)){
       STOP_FLAG = 100;
     }
   }
-  //nrf24l01_write_packet((u8*)&(Sequeue_Get_Rear(&ANGLE_SEQ)),2);
+  my2401_data TXD;
+  TXD.angle = Sequeue_Get_Rear(&ANGLE_SEQ)-ANGLE_MID;
+  TXD.speed = SPEED_CURR;
+  nrf24l01_write_packet((u8*)&TXD,sizeof(my2401_data));
   PT_END(pt);
 }
 
