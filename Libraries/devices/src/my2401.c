@@ -1,10 +1,13 @@
 #include "my2401.h"
-u8 temp_rx[32];
+#include "myadc.h"
 u32 temp_rx_len=0;
 my2401_data RF2401_RXD;
 void isr(uint32_t pinArray){
   nrf24l01_read_packet((u8*)&RF2401_RXD,&temp_rx_len);
-  
+  if(temp_rx_len >2){
+    Sequeue_In_Queue(&RF_SEQ,RF2401_RXD);
+    Sequeue_Out_Queue(&RF_SEQ);
+  }
 }
 
 void NFR24l01_RX_Init(){

@@ -24,7 +24,8 @@ void PIT1_Isr(void){
   int j = abs(Sequeue_Get_Rear(&ANGLE_SEQ) - ANGLE_MID) / 30;
   if (STOP_FLAG < 100){
     //SPEED_Control(SPEED_SET(140-j));
-    SPEED_Control(SPEED_SET(165-j));
+    //SPEED_Control(SPEED_SET(165-j));
+    SPEED_Control(SPEED_SET(165));
   }
   else{
     SPEED_Stop();

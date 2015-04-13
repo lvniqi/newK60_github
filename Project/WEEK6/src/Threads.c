@@ -20,7 +20,7 @@ PT_THREAD(GetAd(PT *pt)){
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
-  ANGLE_Control();
+  //ANGLE_Control();
   if (MyADC_H1_Average(&ADCDATA)+ 
       MyADC_H2_Average(&ADCDATA)+
       MyADC_V1_Average(&ADCDATA) < 200){
@@ -89,7 +89,7 @@ PT_THREAD(STOP(PT *pt)){
     PT_WAIT_UNTIL(pt, pt->ready);
     pt->ready = 0;  
     if (STOP_FLAG < 100){
-      STOP_FLAG +=5;//20sÍ£³µ
+      STOP_FLAG +=50;//5sÍ£³µ
     }
   }
   PT_END(pt);

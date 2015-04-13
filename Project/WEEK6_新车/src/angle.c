@@ -161,6 +161,8 @@ void duoji_Control(void){
   float h_1_sum = MyADC_H1_Sum(&ADCDATA);
   //第二排 总和
   float h_2_sum = MyADC_H2_Sum(&ADCDATA);
+  //第二排 右侧减左侧
+  float h_2_cut = ADCDATA.h_2[2] - ADCDATA.h_2[0];
   //垂直 差 和
   float v_1_cut,v_1_sum;
   v_1_cut = ADCDATA.v_1[1] - ADCDATA.v_1[0];
@@ -174,7 +176,7 @@ void duoji_Control(void){
   float fit_right=powf((powf(ADCDATA.h_1[2],2)+
                         powf(ADCDATA.v_1[1],2))/2.0,0.5);
   
-  angle_kp=20000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
+  angle_kp=21000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
     /((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
   //angle_kp=32000;
   angle_kd=2*angle_kp;
@@ -206,16 +208,16 @@ void duoji_Control(void){
   }
 
   if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&
-     ADCDATA.h_1[0]<70&&
-       ADCDATA.h_1[1]<80&&
-         ADCDATA.v_1[0]<100)
+     ADCDATA.h_1[0]<60&&
+       ADCDATA.h_1[1]<70&&
+         ADCDATA.v_1[0]<90)
   {
     ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
   }
   if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&
-     ADCDATA.h_1[2]<70&&
-       ADCDATA.h_1[1]<80&&
-         ADCDATA.v_1[1]<100)
+     ADCDATA.h_1[2]<60&&
+       ADCDATA.h_1[1]<70&&
+         ADCDATA.v_1[1]<90)
   {
     ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;  
   }
@@ -224,7 +226,7 @@ void duoji_Control(void){
   {
     if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&
        ADCDATA.v_1[0]>ADCDATA.v_1[1]&&
-         ADCDATA.h_2[1]>60||
+         ADCDATA.h_2[1]>80||
            (ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;
@@ -234,7 +236,7 @@ void duoji_Control(void){
   {
     if(ADCDATA.h_1[2]>ADCDATA.h_1[0]&&
        ADCDATA.v_1[1]>ADCDATA.v_1[0]&&
-         ADCDATA.h_2[1]>60||
+         ADCDATA.h_2[1]>80||
            (ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;  
@@ -256,7 +258,7 @@ void duoji_Control(void){
         ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;
         ep=ANGLE_LIMIT/angle_kp;
       }
-      if(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK)
+      if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK)
       {
         ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
         ep=-ANGLE_LIMIT/angle_kp;
@@ -285,7 +287,16 @@ void duoji_Control(void){
     Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 3);
 
   angle = (u32)(ANGLE_MID + (angle_kp *ep + angle_kd * ed));
-
+  //测试直道检测
+  if(abs(angle-ANGLE_MID) <100 && h_2_sum>300 && abs(h_2_cut)/h_2_sum <0.25){
+    ANGLE_SEQ.count++;
+    if(ANGLE_SEQ.count>5){
+      Beep_Enable();
+    }
+  }
+  else{
+    ANGLE_SEQ.count = 0;
+  }
   ANGLE_Size_control(angle);
 
   Sequeue_In_Queue(&ANGLE_SEQ, angle);

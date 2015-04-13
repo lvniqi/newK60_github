@@ -31,8 +31,9 @@ void PIT1_Isr(void){
     //SPEED_Control(SPEED_SET(140-j));
     //SPEED_Control(SPEED_SET(180-j));
     //SPEED_Control(SPEED_SET(170-j));
-    u32 sp_expect=(u32)(175*((ADCDATA.h_1[1]+ADCDATA.h_2[1])/2.0)/pow((pow(ADCDATA.h_1[1],2)+pow(ADCDATA.h_2[1],2))/2.0,0.5));
-    SPEED_Control(SPEED_SET(sp_expect));
+    //u32 sp_expect=(u32)(175*((ADCDATA.h_1[1]+ADCDATA.h_2[1])/2.0)/pow((pow(ADCDATA.h_1[1],2)+pow(ADCDATA.h_2[1],2))/2.0,0.5));
+    //SPEED_Control(SPEED_SET(sp_expect));
+    SPEED_Control(SPEED_SET(165));
   }
   else{
     SPEED_Stop();

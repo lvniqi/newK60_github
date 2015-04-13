@@ -11,8 +11,6 @@
 #include "spi.h"
 #include "my2401.h"
 #include "myuart.h"
-
-
 int main(void){
   DelayInit();
   myUart_Init();

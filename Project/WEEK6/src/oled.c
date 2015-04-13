@@ -1166,7 +1166,37 @@ void OLED_PrintShort(unsigned char ucIdxX, unsigned char ucIdxY, short int
 
   return ;
 }
+/*****************************************************************************
+函 数 名  : OLED_PrintShort
+功能描述  : 将一个Short型数转换成5位数进行显示
+输入参数  : UCHAR8 ucIdxX ucIdxX的范围为0～120
+UCHAR8 ucIdxY ucIdxY为页的范围0～7
+SHORT16 sData  sData为需要转化显示的数值
+输出参数  : none
+返 回 值  : none
+ *****************************************************************************/
+void OLED_PrintShort_3(unsigned char ucIdxX, unsigned char ucIdxY, short int
+  sData){
+  unsigned short int i, j, k, l, m, usData;
+  if (sData < 0){
+    OLED_P6x8Char(ucIdxX, ucIdxY, '-');
+    usData = (unsigned short int)( - sData);
+  }
+  else{
+    OLED_P6x8Char(ucIdxX, ucIdxY, '+');
+    usData = (unsigned short int)sData;
+  }
+  l = usData / 10000;
+  m = (usData % 10000) / 1000;
+  i = (usData % 1000) / 100;
+  j = (usData % 100) / 10;
+  k = usData % 10;
+  OLED_P6x8Char(ucIdxX + 6, ucIdxY, i + 48);
+  OLED_P6x8Char(ucIdxX + 12, ucIdxY, j + 48);
+  OLED_P6x8Char(ucIdxX + 18, ucIdxY, k + 48);
 
+  return ;
+}
 /*****************************************************************************
 函 数 名  : OLED_PrintImage
 功能描述  : 将图像显示出来
