@@ -35,11 +35,5 @@ int main(void){
     SHOW(&thread[2]);//显示数据
     STOP(&thread[3]);//停车
     UART_CONTROL(&thread[4]);//串口控制
-    //如果运行结束
-    //if (GetAd(&thread[0]) == PT_ENDED){ 
-      //nrf24l01_set_tx_mode();
-      //nrf24l01_write_packet("1234567890", 10);
-    //  MyADC_Show(&ADCDATA); //显示
-    //}
   }
 }

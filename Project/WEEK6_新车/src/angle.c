@@ -150,8 +150,7 @@ void ANGLE_Control(void){
     ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
 }
 
-void duoji_Control(void)
-{
+void duoji_Control(void){
   /**
    *舵机方向控制
   */
@@ -175,7 +174,8 @@ void duoji_Control(void)
   float fit_right=powf((powf(ADCDATA.h_1[2],2)+
                         powf(ADCDATA.v_1[1],2))/2.0,0.5);
   
-  angle_kp=20000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)/((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
+  angle_kp=20000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
+    /((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
   //angle_kp=32000;
   angle_kd=2*angle_kp;
   
@@ -189,35 +189,53 @@ void duoji_Control(void)
   {
     ANGLE_SEQ.lock = ANGLE_LEFT_LOCK;
   }
-  else if(fit_right>ADCDATA.h_1[1]&&fit_right-15>fit_left&&(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
+  else if(fit_right>ADCDATA.h_1[1]&&
+          fit_right-15>fit_left&&
+            (ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
   { 
     ANGLE_SEQ.lock = ANGLE_RIGHT_LOCK;
   }
  
-  if(ADCDATA.h_1[0]>100||ADCDATA.h_1[1]>100||ADCDATA.h_1[2]>100||ADCDATA.v_1[0]>110||ADCDATA.v_1[1]>110) 
+  if(ADCDATA.h_1[0]>100||
+     ADCDATA.h_1[1]>100||
+       ADCDATA.h_1[2]>100||
+         ADCDATA.v_1[0]>110||
+           ADCDATA.v_1[1]>110) 
   {
     ANGLE_SEQ.lock = ANGLE_NOLOCK; 
   }
 
-  if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&ADCDATA.h_1[0]<70&&ADCDATA.h_1[1]<80&&ADCDATA.v_1[0]<100)
+  if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&
+     ADCDATA.h_1[0]<70&&
+       ADCDATA.h_1[1]<80&&
+         ADCDATA.v_1[0]<100)
   {
     ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
   }
-  if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&ADCDATA.h_1[2]<70&&ADCDATA.h_1[1]<80&&ADCDATA.v_1[1]<100)
+  if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&
+     ADCDATA.h_1[2]<70&&
+       ADCDATA.h_1[1]<80&&
+         ADCDATA.v_1[1]<100)
   {
     ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;  
   }
   
   if(ANGLE_SEQ.lockmax == ANGLE_LEFT_MAX_LOCK)
   {
-    if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&ADCDATA.v_1[0]>ADCDATA.v_1[1]&&ADCDATA.h_2[1]>60||(ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
+    if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&
+       ADCDATA.v_1[0]>ADCDATA.v_1[1]&&
+         ADCDATA.h_2[1]>60||
+           (ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;
     }
   }
   else if(ANGLE_SEQ.lockmax == ANGLE_RIGHT_MAX_LOCK)
   {
-    if(ADCDATA.h_1[2]>ADCDATA.h_1[0]&&ADCDATA.v_1[1]>ADCDATA.v_1[0]&&ADCDATA.h_2[1]>60||(ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
+    if(ADCDATA.h_1[2]>ADCDATA.h_1[0]&&
+       ADCDATA.v_1[1]>ADCDATA.v_1[0]&&
+         ADCDATA.h_2[1]>60||
+           (ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;  
     }
@@ -264,7 +282,7 @@ void duoji_Control(void)
   }
   
   ed=Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 1) - 
-  Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 3);
+    Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 3);
 
   angle = (u32)(ANGLE_MID + (angle_kp *ep + angle_kd * ed));
 

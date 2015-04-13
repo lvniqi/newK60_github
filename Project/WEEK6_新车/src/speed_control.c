@@ -2,9 +2,9 @@
 #include "speed_control.h"
 
 
-float SPEED_P = 80;
-float SPEED_I = 1.8;
-float SPEED_D = 2;
+float SPEED_P = 60;
+float SPEED_I = 0.15;
+float SPEED_D = 0;
 speed_sequeue SPEED_LIST;
 
 /*现有速度*/

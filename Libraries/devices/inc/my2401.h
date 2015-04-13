@@ -10,6 +10,7 @@
     u8 status_flag;
     int angle;
     int speed;
+    int speed_set;
   }my2401_data;
   extern my2401_data RF2401_RXD;
   extern void NFR24l01_RX_Init();

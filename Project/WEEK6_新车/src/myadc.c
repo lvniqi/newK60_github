@@ -41,11 +41,12 @@ void MyADC_Get(adc *adcdata){
   adcdata->h_2[2] = ADC_QuickReadValue(ADC1_SE13_PB07); //第二排右侧
   //adcdata->protect = ADC_QuickReadValue(ADC1_SE15_PB11); //第二排右侧
   //adcdata->IR = (5556-ADC_QuickReadValue(ADC0_SE14_PC0))/(24.6);//红外
+  
   Sequeue_In_Queue(&ADC_SEQ, ADCDATA);
   Sequeue_Out_Queue(&ADC_SEQ);
 }
 
-u16 MyADC_H1_Sum(adc *adcdata){
+u16 MyADC_H1_Sum(const adc *adcdata){
   u32 temp = 0;
   int i;
   for (i = 0; i < AD_H1_LEN; i++){
@@ -54,7 +55,7 @@ u16 MyADC_H1_Sum(adc *adcdata){
   return temp;
 }
 
-u16 MyADC_H1_Min(adc *adcdata){
+u16 MyADC_H1_Min(const adc *adcdata){
   u32 temp = adcdata->h_1[0];
   int i;
   for (i = 1; i < AD_H1_LEN; i++){
@@ -64,7 +65,7 @@ u16 MyADC_H1_Min(adc *adcdata){
   return temp;
 }
 
-u16 MyADC_H2_Sum(adc *adcdata){
+u16 MyADC_H2_Sum(const adc *adcdata){
   u32 temp = 0;
   int i;
   for (i = 0; i < AD_H2_LEN; i++){
@@ -73,7 +74,7 @@ u16 MyADC_H2_Sum(adc *adcdata){
   return temp;
 }
 
-u16 MyADC_H2_Min(adc *adcdata){
+u16 MyADC_H2_Min(const adc *adcdata){
   u32 temp = adcdata->h_2[0];
   int i;
   for (i = 1; i < AD_H2_LEN; i++){
@@ -83,7 +84,7 @@ u16 MyADC_H2_Min(adc *adcdata){
   return temp;
 }
 
-u16 MyADC_V1_Sum(adc *adcdata){
+u16 MyADC_V1_Sum(const adc *adcdata){
   u32 temp = 0;
   int i;
   for (i = 0; i < AD_V1_LEN; i++){
@@ -92,7 +93,7 @@ u16 MyADC_V1_Sum(adc *adcdata){
   return temp;
 }
 
-u16 MyADC_V1_Min(adc *adcdata){
+u16 MyADC_V1_Min(const adc *adcdata){
   u32 temp = adcdata->v_1[0];
   int i;
   for (i = 1; i < AD_H2_LEN; i++){
@@ -102,7 +103,7 @@ u16 MyADC_V1_Min(adc *adcdata){
   return temp;
 }
 
-void MyADC_Show(adc *adcdata){
+void MyADC_Show(const adc *adcdata){
   
   OLED_PrintShort_3(30, 0, (adcdata->h_1)[0]);
   OLED_PrintShort_3(60, 0, (adcdata->h_1)[1]);
@@ -113,7 +114,7 @@ void MyADC_Show(adc *adcdata){
   OLED_PrintShort_3(60, 2, (adcdata->h_2)[1]);
   OLED_PrintShort_3(90, 2, (adcdata->h_2)[2]);
 }
-void MyADC_Uart_Show(adc *adcdata){
+void MyADC_Uart_Show(const adc *adcdata){
   u8 data[9] = {0,};
   int i;
   for(i=0;i<3;i++){
