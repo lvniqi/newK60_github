@@ -8,7 +8,7 @@
 PT thread[THREAD_NUM];
 u8 BEEP_FLAG = 0;
 u8 STOP_FLAG = 0;
-#define Beep(enable) (GPIO_WriteBit(HW_GPIOD, 10, enable))
+#define Beep(enable) (GPIO_WriteBit(HW_GPIOB, 18, enable))
 /********************************************************************
  * 名称 : PT_THREAD( GetAd(PT *pt) )
  * 功能 : 线程 得到AD
@@ -20,10 +20,12 @@ PT_THREAD(GetAd(PT *pt)){
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
   MyADC_Get(&ADCDATA);
-  //ANGLE_Control();
-  if (MyADC_H1_Average(&ADCDATA)+ 
-      MyADC_H2_Average(&ADCDATA)+
-      MyADC_V1_Average(&ADCDATA) < 200){
+  if(RF_SEQ.isStright == true){
+    duoji_Control();
+  }
+  if (MyADC_H1_Sum(&ADCDATA)+ 
+      MyADC_H2_Sum(&ADCDATA)+
+      MyADC_V1_Sum(&ADCDATA) < 15){
     if (STOP_FLAG < 100){
       STOP_FLAG = 100;
     }
@@ -89,8 +91,24 @@ PT_THREAD(STOP(PT *pt)){
     PT_WAIT_UNTIL(pt, pt->ready);
     pt->ready = 0;  
     if (STOP_FLAG < 100){
-      STOP_FLAG +=50;//5s停车
+      STOP_FLAG +=20;//5s停车
     }
   }
+  PT_END(pt);
+}
+PT_THREAD(SET_ANGLE(PT *pt)){
+  static u8 mycount;
+  PT_BEGIN(pt);
+  PT_WAIT_UNTIL(pt,RF2401_RXD.count != mycount);
+  PT_WAIT_UNTIL(pt,RF_SEQ.isStright == false);
+  mycount = RF2401_RXD.count;
+  __disable_irq();
+  int temp_num = (RF_SEQ.base_len+1500)/(RF2401_RXD.speed*300/2200);
+  if(RF2401_RXD.speed >5 && temp_num<RF_SEQ.len_max){
+    FTM_PWM_ChangeDuty(HW_FTM1,HW_FTM_CH1,
+                       Sequeue_Get_One(&RF_SEQ,RF_SEQ.len_max-temp_num).angle+ANGLE_MID);
+                       //Sequeue_Get_One(&RF_SEQ,RF_SEQ.len_max-1).angle+ANGLE_MID);
+  }
+    __enable_irq();
   PT_END(pt);
 }

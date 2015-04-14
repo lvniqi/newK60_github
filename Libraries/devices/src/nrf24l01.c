@@ -152,7 +152,7 @@ int nrf24l01_init(spi_bus_t bus, uint32_t cs)
 {
     uint32_t ret;
     device.csn = cs;
-    device.config.baudrate = 1*1000*1000;
+    device.config.baudrate = 16*1000*1000;
     device.config.data_width = 8;
     device.config.mode = SPI_MODE_0 | SPI_MASTER | SPI_MSB;
     ret = spi_bus_attach_device(bus, &device);
@@ -262,7 +262,7 @@ int nrf24l01_read_packet(uint8_t *buf, uint32_t *len)
         /* if rev_len > 32 which means a error occur, usr FLUSH_RX to clear */
         if(rev_len > 32)
         {
-            NRF24L01_TRACE("rev len > 32, error!\r\n");
+            //NRF24L01_TRACE("rev len > 32, error!\r\n");
             sta = FLUSH_RX;
             spi_write(&device, &sta, 1, true);
             *len = 32;

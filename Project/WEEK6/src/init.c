@@ -45,6 +45,6 @@ void BaseTimer(void){
  * 输出 : 无
  ***********************************************************************/
 void beep_Init(void){
-  GPIO_QuickInit(HW_GPIOD, 10, kGPIO_Mode_OPP);
-  GPIO_WriteBit(HW_GPIOD, 10, 0); //蜂鸣器初始化输出为0
+  GPIO_QuickInit(HW_GPIOB, 18, kGPIO_Mode_OPP);
+  GPIO_WriteBit(HW_GPIOB, 18, 0); //蜂鸣器初始化输出为0
 }

@@ -287,16 +287,6 @@ void duoji_Control(void){
     Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 3);
 
   angle = (u32)(ANGLE_MID + (angle_kp *ep + angle_kd * ed));
-  //≤‚ ‘÷±µ¿ºÏ≤‚
-  if(abs(angle-ANGLE_MID) <100 && h_2_sum>300 && abs(h_2_cut)/h_2_sum <0.25){
-    ANGLE_SEQ.count++;
-    if(ANGLE_SEQ.count>5){
-      Beep_Enable();
-    }
-  }
-  else{
-    ANGLE_SEQ.count = 0;
-  }
   ANGLE_Size_control(angle);
 
   Sequeue_In_Queue(&ANGLE_SEQ, angle);

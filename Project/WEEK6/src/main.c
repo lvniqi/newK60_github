@@ -17,6 +17,7 @@ int main(void){
   PT_INIT(&thread[1], 20); //20ms一次蜂鸣器 
   PT_INIT(&thread[2], 200); //200ms一次显示数据
   PT_INIT(&thread[3], 1000); //1s一次停车指示
+  PT_INIT(&thread[4], 5); //设定打角
   OLED_Init(); //OLED初始化
   NFR24l01_RX_Init();
   ANGLE_Init(); //舵机初始化
@@ -31,16 +32,9 @@ int main(void){
   
   beep_Init(); //蜂鸣器初始化
   while (1){
-    __disable_irq();
-    int temp_num = (RF_SEQ.base_len)/(RF2401_RXD.speed*300/2200);
-    if(RF2401_RXD.speed >10 && temp_num<RF_SEQ.len_max){
-      FTM_PWM_ChangeDuty(HW_FTM1,HW_FTM_CH1,
-                         Sequeue_Get_One(&RF_SEQ,RF_SEQ.len_max-temp_num).angle+ANGLE_MID);
-                         //Sequeue_Get_One(&RF_SEQ,RF_SEQ.len_max-1).angle+ANGLE_MID);
-    }
-    __enable_irq();
     GetAd(&thread[0]); //ad采集
-    //BEEP(&thread[1]); //蜂鸣器
+    SET_ANGLE(&thread[4]);//设定打角
+    BEEP(&thread[1]); //蜂鸣器
     SHOW(&thread[2]);//显示数据
     STOP(&thread[3]);//停车
   }

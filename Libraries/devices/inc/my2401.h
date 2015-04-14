@@ -8,6 +8,7 @@
   typedef struct _my2401_data
   {
     u8 status_flag;
+    u8 count;
     int angle;
     int speed;
     int speed_set;
@@ -20,8 +21,10 @@
         u16 len_should_cut;
         u16 len_max;
         u8 base_len;
+        u16 s_counter;
+        bool isStright;
   } my2401_data_sequeue;
-  #define MY2401_DATA_SEQ_LEN 100
+  #define MY2401_DATA_SEQ_LEN 600
   extern my2401_data _MY2401_DATA_SEQ_DATABASE[MY2401_DATA_SEQ_LEN];
   extern my2401_data_sequeue RF_SEQ;
   extern my2401_data RF2401_RXD;

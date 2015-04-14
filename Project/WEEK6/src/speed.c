@@ -25,7 +25,16 @@ void PIT1_Isr(void){
   if (STOP_FLAG < 100){
     //SPEED_Control(SPEED_SET(140-j));
     //SPEED_Control(SPEED_SET(165-j));
-    SPEED_Control(SPEED_SET(165));
+    if(RF_SEQ.isStright == true){
+      int temp = ((int)ADCDATA.IR-RF_SEQ.base_len)>50;
+    if(abs(temp)>50){
+      temp/=2;
+    }
+      SPEED_Control(SPEED_SET(165+2*temp));
+    }
+    else{
+      SPEED_Control(165);
+    }
   }
   else{
     SPEED_Stop();

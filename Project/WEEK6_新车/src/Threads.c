@@ -16,6 +16,7 @@ u8 STOP_FLAG = 0;
  * 输出 : 无
  ***********************************************************************/
 PT_THREAD(GetAd(PT *pt)){
+  static u8 count = 0;
   PT_BEGIN(pt);
   PT_WAIT_UNTIL(pt, pt->ready);
   pt->ready = 0;
@@ -33,6 +34,7 @@ PT_THREAD(GetAd(PT *pt)){
   my2401_data TXD;
   TXD.angle = Sequeue_Get_Rear(&ANGLE_SEQ)-ANGLE_MID;
   TXD.speed = SPEED_CURR;
+  TXD.count = count++;
   TXD.speed_set = 165;
   if(!GPIO_ReadBit(HW_GPIOD, 8)){
     nrf24l01_write_packet((u8*)&TXD,sizeof(my2401_data));
@@ -97,7 +99,7 @@ PT_THREAD(STOP(PT *pt)){
     PT_WAIT_UNTIL(pt, pt->ready);
     pt->ready = 0;  
     if (STOP_FLAG < 100){
-      STOP_FLAG +=50;//5s停车
+      STOP_FLAG +=5;//5s停车
     }
   }
   PT_END(pt);

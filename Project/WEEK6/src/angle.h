@@ -15,7 +15,7 @@
    *duoji_left:舵机左最大值
    */
   #define ANGLE_LIMIT 1300
-  #define ANGLE_MID 4600
+  #define ANGLE_MID 4650
   #define ANGLE_LEFT_LOCK 1
   #define ANGLE_RIGHT_LOCK 2
   #define ANGLE_LEFT_MAX_LOCK 1
