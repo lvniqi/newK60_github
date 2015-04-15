@@ -26,9 +26,9 @@ PT_THREAD(GetAd(PT *pt)){
   duoji_Control();
   if (MyADC_H1_Sum(&ADCDATA)+ 
       MyADC_H2_Sum(&ADCDATA)+
-      MyADC_V1_Sum(&ADCDATA) < 15){
-    if (STOP_FLAG < 100){
-      STOP_FLAG = 100;
+      MyADC_V1_Sum(&ADCDATA) < 12){
+    if (STOP_FLAG < 18){
+      STOP_FLAG = 18;
     }
   }
   my2401_data TXD;
@@ -98,8 +98,8 @@ PT_THREAD(STOP(PT *pt)){
   while(true){
     PT_WAIT_UNTIL(pt, pt->ready);
     pt->ready = 0;  
-    if (STOP_FLAG < 100){
-      STOP_FLAG +=5;//5s停车
+    if (STOP_FLAG < 18){
+      STOP_FLAG +=1;//5s停车
     }
   }
   PT_END(pt);
@@ -121,7 +121,7 @@ PT_THREAD(UART_CONTROL(PT *pt)){
   }
   //停止运行
   else if(strcmp(RXD_DATA.dataspace,"STOP") == 0){
-    STOP_FLAG = 100;
+    STOP_FLAG = 18;
   }
   else{
     ;

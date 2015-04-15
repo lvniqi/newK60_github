@@ -3,7 +3,7 @@
 
 
 float SPEED_P = 60;
-float SPEED_I = 0.2;
+float SPEED_I = 0.4;
 float SPEED_D = 0;
 speed_sequeue SPEED_LIST;
 

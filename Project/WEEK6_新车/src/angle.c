@@ -176,7 +176,7 @@ void duoji_Control(void){
   float fit_right=powf((powf(ADCDATA.h_1[2],2)+
                         powf(ADCDATA.v_1[1],2))/2.0,0.5);
   
-  angle_kp=21000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
+  angle_kp=19000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
     /((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
   //angle_kp=32000;
   angle_kd=2*angle_kp;
@@ -208,16 +208,16 @@ void duoji_Control(void){
   }
 
   if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&
-     ADCDATA.h_1[0]<60&&
-       ADCDATA.h_1[1]<70&&
-         ADCDATA.v_1[0]<90)
+     ADCDATA.h_1[0]<70&&
+       ADCDATA.h_1[1]<80&&
+         ADCDATA.v_1[0]<100)
   {
     ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
   }
   if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&
-     ADCDATA.h_1[2]<60&&
-       ADCDATA.h_1[1]<70&&
-         ADCDATA.v_1[1]<90)
+     ADCDATA.h_1[2]<70&&
+       ADCDATA.h_1[1]<80&&
+         ADCDATA.v_1[1]<100)
   {
     ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;  
   }
@@ -226,7 +226,7 @@ void duoji_Control(void){
   {
     if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&
        ADCDATA.v_1[0]>ADCDATA.v_1[1]&&
-         ADCDATA.h_2[1]>80||
+         ADCDATA.h_2[1]>60||
            (ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;
@@ -236,7 +236,7 @@ void duoji_Control(void){
   {
     if(ADCDATA.h_1[2]>ADCDATA.h_1[0]&&
        ADCDATA.v_1[1]>ADCDATA.v_1[0]&&
-         ADCDATA.h_2[1]>80||
+         ADCDATA.h_2[1]>60||
            (ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
     {
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;  
