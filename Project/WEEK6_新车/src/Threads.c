@@ -1,14 +1,14 @@
 /*
  * Threads.c
  *
- *  Created on: 203年10月22日
+ *  Created on: 2014年10月22日
  *      Author: lvniqi
  */
 #include "Threads.h"
 PT thread[THREAD_NUM];
 u8 BEEP_FLAG = 0;
 u8 STOP_FLAG = 0;
-#define Beep(enable) (GPIO_WriteBit(HW_GPIOB, 3, enable))
+#define Beep(enable) (GPIO_WriteBit(HW_GPIOB, 18, enable))
 /********************************************************************
  * 名称 : PT_THREAD( GetAd(PT *pt) )
  * 功能 : 线程 得到AD
@@ -26,9 +26,9 @@ PT_THREAD(GetAd(PT *pt)){
   duoji_Control();
   if (MyADC_H1_Sum(&ADCDATA)+ 
       MyADC_H2_Sum(&ADCDATA)+
-      MyADC_V1_Sum(&ADCDATA) < 15){
-    if (STOP_FLAG < 3){
-      STOP_FLAG = 3;
+      MyADC_V1_Sum(&ADCDATA) < 12){
+    if (STOP_FLAG < 18){
+      STOP_FLAG = 18;
     }
   }
   my2401_data TXD;
@@ -98,7 +98,7 @@ PT_THREAD(STOP(PT *pt)){
   while(true){
     PT_WAIT_UNTIL(pt, pt->ready);
     pt->ready = 0;  
-    if (STOP_FLAG < 3){
+    if (STOP_FLAG < 18){
       STOP_FLAG +=1;//5s停车
     }
   }
@@ -121,7 +121,7 @@ PT_THREAD(UART_CONTROL(PT *pt)){
   }
   //停止运行
   else if(strcmp(RXD_DATA.dataspace,"STOP") == 0){
-    STOP_FLAG = 3;
+    STOP_FLAG = 18;
   }
   else{
     ;

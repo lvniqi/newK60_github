@@ -41,12 +41,7 @@ void MyADC_Get(adc *adcdata){
   Sequeue_In_Queue(&ADC_SEQ, ADCDATA);
   Sequeue_Out_Queue(&ADC_SEQ);
 }
-u16 MyADC_L1_Sum(const adc *adcdata){
-  return adcdata->h_1[0]+adcdata->v_1[0];
-}
-u16 MyADC_R1_Sum(const adc *adcdata){
-  return adcdata->h_1[AD_H1_LEN-1]+adcdata->v_1[AD_V1_LEN-1];
-}
+
 u16 MyADC_H1_Sum(const adc *adcdata){
   u32 temp = 0;
   int i;
