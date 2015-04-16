@@ -30,11 +30,13 @@
   extern void MyADC_Init();
   extern void MyADC_Get(adc *adcdata);
   extern void MyADC_Show(const adc *adcdata);
+  extern u16 MyADC_L1_Sum(const adc *adcdata);
+  extern u16 MyADC_R1_Sum(const adc *adcdata);
   extern u16 MyADC_H1_Sum(const adc *adcdata);
-  #define MyADC_H1_Average(adcdata) (MyADC_H1_Sum(adcdata)/AD_H1_LEN)
+  #define MyADC_H1_Avr(adcdata) (MyADC_H1_Sum(adcdata)/AD_H1_LEN)
   extern u16 MyADC_H2_Sum(const adc *adcdata);
-  #define MyADC_H2_Average(adcdata) (MyADC_H2_Sum(adcdata)/AD_H2_LEN)
+  #define MyADC_H2_Avr(adcdata) (MyADC_H2_Sum(adcdata)/AD_H2_LEN)
   extern u16 MyADC_V1_Sum(const adc *adcdata);
   extern u16 MyADC_V1_Min(const adc *adcdata);
-  #define MyADC_V1_Average(adcdata) (MyADC_V1_Sum(adcdata)/AD_V1_LEN)
+  #define MyADC_V1_Avr(adcdata) (MyADC_V1_Sum(adcdata)/AD_V1_LEN)
 #endif

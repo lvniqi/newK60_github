@@ -51,7 +51,8 @@ typedef struct _angle_sequeue
         u16 len_should_cut;
         u16 len_max;
         u8 lock;
-        u8 lockmax;
+        u8 lock_last;
+        bool lockmax;
         u8 count;
         
 } angle_sequeue;
