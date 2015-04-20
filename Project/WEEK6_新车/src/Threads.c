@@ -1,7 +1,7 @@
 /*
  * Threads.c
  *
- *  Created on: 2014年10月22日
+ *  Created on: 2018年10月22日
  *      Author: lvniqi
  */
 #include "Threads.h"
@@ -36,9 +36,9 @@ PT_THREAD(GetAd(PT *pt)){
   TXD.speed = SPEED_CURR;
   TXD.count = count++;
   TXD.speed_set = 165;
-  if(!GPIO_ReadBit(HW_GPIOD, 8)){
+  /*if(!GPIO_ReadBit(HW_GPIOD, 8)){
     nrf24l01_write_packet((u8*)&TXD,sizeof(my2401_data));
-  }
+  }*/
   PT_END(pt);
 }
 
@@ -57,7 +57,7 @@ PT_THREAD(BEEP(PT *pt)){
     my_beep_flag = BEEP_FLAG;
     {
       Beep(1);
-      for (i = 0; i < 10; i++){
+      for (i = 0; i < 18; i++){
         PT_WAIT_UNTIL(pt, pt->ready);
         pt->ready = 0;
         if (BEEP_FLAG != my_beep_flag){

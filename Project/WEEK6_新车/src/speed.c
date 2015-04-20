@@ -29,9 +29,15 @@ void PIT1_Isr(void){
   //int j = abs(Sequeue_Get_Rear(&ANGLE_SEQ) - ANGLE_MID) / 140;
   if (STOP_FLAG < 18){
     //SPEED_Control(SPEED_SET(140-j));
-    //SPEED_Control(SPEED_SET(180-j));
+    //SPEED_Control(SPEED_SET(40-j));
     //SPEED_Control(SPEED_SET(170-j));
-    u32 sp_expect=(u32)(185*((ADCDATA.h_1[1]+ADCDATA.h_2[1])/2.0)/pow((pow(ADCDATA.h_1[1],2)+pow(ADCDATA.h_2[1],2))/2.0,0.5));
+    u32 sp_expect;
+    if(ANGLE_SEQ.count>40){
+      sp_expect = 80;
+    }
+    else{
+      sp_expect=(u32)((170-ANGLE_SEQ.count)*((ADCDATA.h_1[1]+ADCDATA.h_2[1])/2.0)/pow((pow(ADCDATA.h_1[1],2)+pow(ADCDATA.h_2[1],2))/2.0,0.5));
+    }
     SPEED_Control(SPEED_SET(sp_expect));
     //SPEED_Control(SPEED_SET(165));
   }

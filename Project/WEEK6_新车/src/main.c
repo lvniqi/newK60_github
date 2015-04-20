@@ -20,8 +20,8 @@ int main(void){
   PT_INIT(&thread[3], 1000); //1s一次停车指示
   PT_INIT(&thread[4], 2000); //串口控制
   OLED_Init(); //OLED初始化
-  NFR24l01_TX_Init();
-  OLED_Init(); //OLED初始化
+  //NFR24l01_TX_Init();
+  //OLED_Init(); //OLED初始化
   BaseTimer_Init(); //1ms基本时钟
   ANGLE_Init(); //舵机初始化
   SPEED_Init(); //电机初始化

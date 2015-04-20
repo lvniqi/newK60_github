@@ -167,16 +167,26 @@ void duoji_Control(void){
   float v_1_cut,v_1_sum;
   v_1_cut = ADCDATA.v_1[1] - ADCDATA.v_1[0];
   v_1_sum = MyADC_V1_Sum(&ADCDATA);
-  
+  float arg_1 = 0.6,arg_2 = 0.3;  
   float cha = 0.3 * h_1_cut + 0.6 * v_1_cut;
-  float he =  0.6 * h_1_sum  + 0.3 * v_1_sum;
+  int temp_dif = ANGLE_not_same_type(h_1_cut,v_1_cut);
+  if(temp_dif){ 
+    if(temp_dif>20){
+      arg_2 /= 2;
+    }
+    else if(temp_dif<-10){
+      arg_1 /= 2;
+      arg_2 *= 2;;
+    }
+  }
+  float he =  arg_1 * h_1_sum  + arg_2 * v_1_sum;
 
   float fit_left=powf((powf(ADCDATA.h_1[0],2)+
                        powf(ADCDATA.v_1[0],2))/2.0,0.5);
   float fit_right=powf((powf(ADCDATA.h_1[2],2)+
                         powf(ADCDATA.v_1[1],2))/2.0,0.5);
   
-  angle_kp=19000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
+  angle_kp=20000*powf((powf(ADCDATA.v_1[0],2)+powf(ADCDATA.v_1[1],2))/2.0,0.5)
     /((ADCDATA.v_1[0]+ADCDATA.v_1[1])/2.0);
   //angle_kp=32000;
   angle_kd=2*angle_kp;
@@ -187,41 +197,53 @@ void duoji_Control(void){
   //左右方向锁定过于滞后
   if(fit_left>ADCDATA.h_1[1]&&
     fit_left-15>fit_right&&
-    (ANGLE_SEQ.lock != ANGLE_RIGHT_LOCK))
+    (ANGLE_SEQ.lock == ANGLE_NOLOCK))
   {
     ANGLE_SEQ.lock = ANGLE_LEFT_LOCK;
   }
   else if(fit_right>ADCDATA.h_1[1]&&
           fit_right-15>fit_left&&
-            (ANGLE_SEQ.lock != ANGLE_LEFT_LOCK))
+            (ANGLE_SEQ.lock == ANGLE_NOLOCK))
   { 
     ANGLE_SEQ.lock = ANGLE_RIGHT_LOCK;
   }
- 
-  if(ADCDATA.h_1[0]>100||
+  //直角确认1
+  if(ANGLE_SEQ.count>10){
+    if(abs(ANGLE_not_same_type(h_1_cut,v_1_cut))>40&&
+       v_1_cut>40){
+      ANGLE_SEQ.count = 100;
+      ANGLE_SEQ.lock_last = ANGLE_RIGHT_LOCK;
+    }
+    else if(abs(ANGLE_not_same_type(h_1_cut,v_1_cut))>40&&
+       v_1_cut<-40){
+      ANGLE_SEQ.count = 100;
+      ANGLE_SEQ.lock_last = ANGLE_LEFT_LOCK;
+    }
+  }
+  if((ADCDATA.h_1[0]>100||
      ADCDATA.h_1[1]>100||
        ADCDATA.h_1[2]>100||
          ADCDATA.v_1[0]>110||
-           ADCDATA.v_1[1]>110) 
+           ADCDATA.v_1[1]>110))
   {
     ANGLE_SEQ.lock = ANGLE_NOLOCK; 
   }
-
+  //最大锁定
   if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK&&
      ADCDATA.h_1[0]<70&&
        ADCDATA.h_1[1]<80&&
-         ADCDATA.v_1[0]<100)
+         ADCDATA.v_1[0]<90)
   {
     ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
   }
   if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK&&
      ADCDATA.h_1[2]<70&&
        ADCDATA.h_1[1]<80&&
-         ADCDATA.v_1[1]<100)
+         ADCDATA.v_1[1]<90)
   {
     ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;  
   }
-  
+  //最大取消锁定
   if(ANGLE_SEQ.lockmax == ANGLE_LEFT_MAX_LOCK)
   {
     if(ADCDATA.h_1[0]>ADCDATA.h_1[2]&&
@@ -242,34 +264,56 @@ void duoji_Control(void){
       ANGLE_SEQ.lockmax = ANGLE_MAX_NOLOCK;  
     }
   }
+  //直角确认2
+  if(ANGLE_SEQ.count>10&&
+     ANGLE_SEQ.lock_last == ANGLE_LEFT_LOCK&&
+       he<120){
+     //ANGLE_SEQ.count = 60;
+     if(h_1_sum > 100){
+        ANGLE_SEQ.lock_last = ANGLE_NOLOCK;
+        if(ANGLE_SEQ.count < 100){
+          ANGLE_SEQ.count = 100;
+        }
+     }
+     ANGLE_SEQ.lock = ANGLE_LEFT_LOCK;
+     ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
+       }
+  else if(ANGLE_SEQ.count>10&&
+     ANGLE_SEQ.lock_last == ANGLE_RIGHT_LOCK&&
+       he<100){
+     //ANGLE_SEQ.count = 60;
+     //ANGLE_SEQ.lock_last = ANGLE_NOLOCK;
+     if(h_1_sum > 100){
+        ANGLE_SEQ.lock_last = ANGLE_NOLOCK;
+        if(ANGLE_SEQ.count < 100){
+          ANGLE_SEQ.count = 100;
+        }
+     }
+     ANGLE_SEQ.lock = ANGLE_RIGHT_LOCK;
+     ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;
+   }
+  
   if(ANGLE_SEQ.lockmax==ANGLE_MAX_NOLOCK)
   {
-    if(he>10)
+    if(ANGLE_not_same_type(h_1_cut,v_1_cut) < -30&&ANGLE_SEQ.count<40){
+      ANGLE_SEQ.count = 40;
+    }
+    if(he>30)
     {
       ep = cha / powf(he, 1.5);
 	  
       Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
       Sequeue_Out_Queue(&ANGLE_P_SEQ);
     }
-    else
-    {
-      if(ANGLE_SEQ.lock == ANGLE_RIGHT_LOCK)
-      {
-        ANGLE_SEQ.lockmax = ANGLE_RIGHT_MAX_LOCK;
-        ep=ANGLE_LIMIT/angle_kp;
-      }
-      if(ANGLE_SEQ.lock == ANGLE_LEFT_LOCK)
-      {
-        ANGLE_SEQ.lockmax = ANGLE_LEFT_MAX_LOCK;
-        ep=-ANGLE_LIMIT/angle_kp;
-      }
-			
-      Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
-      Sequeue_Out_Queue(&ANGLE_P_SEQ);
-    }
   }
   else
   {
+    if(ANGLE_not_same_type(h_1_cut,v_1_cut) < -10&&ANGLE_SEQ.count<60){
+      ANGLE_SEQ.count = 60;
+    }
+    else if(ANGLE_SEQ.count<10){
+      ANGLE_SEQ.count = 10;
+    }
     if(ANGLE_SEQ.lockmax == ANGLE_RIGHT_MAX_LOCK)
     {
       ep=ANGLE_LIMIT/angle_kp;
@@ -278,9 +322,6 @@ void duoji_Control(void){
     {
       ep=-ANGLE_LIMIT/angle_kp;
     }
-		
-    Sequeue_In_Queue(&ANGLE_P_SEQ, ep);
-    Sequeue_Out_Queue(&ANGLE_P_SEQ);
   }
   
   ed=Sequeue_Get_One(&ANGLE_P_SEQ, ANGLE_P_SEQ.len - 1) - 
@@ -291,6 +332,12 @@ void duoji_Control(void){
 
   Sequeue_In_Queue(&ANGLE_SEQ, angle);
   Sequeue_Out_Queue(&ANGLE_SEQ);
-  
+  if(ANGLE_SEQ.count>10){
+    ANGLE_SEQ.count -= 4;
+  }
+  else if(ANGLE_SEQ.count>0){
+    ANGLE_SEQ.lock_last = ANGLE_NOLOCK;
+    ANGLE_SEQ.count--;
+  }
   ANGLE_ChangeDuty(Sequeue_Get_Rear(&ANGLE_SEQ));
 }
